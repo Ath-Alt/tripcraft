@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Dashboard | TripCraft{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/adminNav.css' %}" />
+    
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inika:wght@400;700&display=swap');
+  
+      :root {
+          --navfont: "Inika", cursive;
+          --main-color: #80D0C7;
+          --2nd-color: #9BD1FA;
+          --nav-color1: #64E1E3;
+          --nav-color2: #49AAF4;
+          --nav-button: #B8F9FA;
+          --icon-categories: #FF8C00;
+          --icon-poi: #E74C3C;
+          --icon-travelers: #2ECC71;
+          --icon-support: #9B59B6;
+          --icon-users: #3498DB;
+          --icon-notifications: #F39C12;
+          --icon-my-notifications: #1ABC9C;
+          --icon-logout: #E74C3C;
+      }
+  
+      /* Only inside navbar */
+      .navbar * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+  
+      .navbar h2 {
+          color: #000;
+          font-family: var(--navfont);
+          font-size: 1.2rem;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          white-space: nowrap;
+      }
+  
+      .navbar h3 {
+          color: #000;
+          font-family: var(--navfont);
+          font-size: 1.5rem;
+          font-style: normal;
+          font-weight: 600;
+          line-height: normal;
+          margin-top: 10px;
+      }
+  
+      .navbar a {
+          text-decoration: none;
+          color: inherit;
+      }
+  
+      .navbar a:visited {
+          color: inherit;
+      }
+  
+      .navbar button {
+          border: none;
+          background: none;
+          cursor: pointer;
+          width: 100%;
+          text-align: left;
+          display: flex;
+          align-items: center;
+      }
+  
+      .admin-container {
+          display: flex;
+          min-height: 100vh;
+          background: linear-gradient(to left top, var(--nav-color2), var(--nav-color1));
+      }
+  
+      .glass {
+          background-color: white;
+          height: 100vh;
+          width: 100%;
+          background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.3));
+          border-radius: 0.5rem;
+          z-index: 2;
+          backdrop-filter: blur(2rem);
+          display: flex;
+      }
+  
+      /* Nav bar */
+      .navbar {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          text-align: center;
+          background-color: #8DDDEE;
+          border-radius: 0.5rem 2.5rem 2.5rem 0.5rem;
+          box-shadow: 0px 4px 20.5px 6px rgba(0, 0, 0, 0.25);
+          padding: 1.5rem 0;
+          overflow-y: auto;
+          -ms-overflow-style: none;  
+          scrollbar-width: none;
+          height: 100%;
+      }
+  
+      .navbar .link,
+      .navbar .utl {
+          display: flex;
+          margin-top: 0.5rem;
+          padding: 0.2rem 1.5rem;
+          gap: 1.5rem;
+          background: var(--nav-button);
+          box-shadow: 1px 4px 3px 0px rgba(0, 0, 0, 0.41) inset;
+          border-radius: 3rem;
+          align-items: center;
+          width: 90%;
+          transition: all 0.2s ease;
+      }
+  
+      .navbar .link:hover,
+      .navbar .utl:hover {
+          background: var(--nav-button);
+          box-shadow: -2px -3px 4px 0px rgba(0, 0, 0, 0.41);
+          border-radius: 3rem;
+          transform: translateX(8px);
+      }
+  
+      .navbar .link.active {
+          background: var(--nav-button);
+          box-shadow: -2px -3px 4px 0px rgba(0, 0, 0, 0.41);
+          border-radius: 3rem;
+          transform: translateX(5px);
+      }
+  
+      .navbar .user {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 0 1rem 1.5rem 1rem;
+      }
+  
+      .navbar .ava {
+          width: 9rem;
+          height: 9rem;
+          flex-shrink: 0;
+          border-radius: 50%;
+      }
+  
+      .navbar .icon-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-width: 2.8rem;
+          height: 2.8rem;
+          background-color: white;
+          border-radius: 50%;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+          flex-shrink: 0;
+      }
+  
+      .navbar .links {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          align-items: center;
+          flex-grow: 1;
+          overflow-y: auto;
+          padding: 0 0.5rem;
+          margin: 1rem 0;
+      }
+  
+      .navbar .utls {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding-top: 1rem;
+          border-top: 1px solid rgba(255,255,255,0.3);
+          margin-top: auto;
+          margin-bottom: 1rem;
+          padding-bottom: 1rem;
+      }
+  
+      .navbar .badge {
+          margin-left: auto;
+          font-weight: bold;
+          flex-shrink: 0;
+      }
+  
+      .navbar .section-title {
+          font-family: var(--navfont);
+          margin: 1.5rem 0 0.5rem 2rem;
+          text-align: left;
+          width: 90%;
+          font-weight: bold;
+          color: #333;
+          font-size: 1.1rem;
+          position: relative;
+      }
+  
+      .navbar .section-title:after {
+          content: '';
+          position: absolute;
+          bottom: -5px;
+          left: 0;
+          width: 50px;
+          height: 2px;
+          background: rgba(255,255,255,0.7);
+      }
+  
+      /* Responsive */
+      @media (max-width: 768px) {
+          .glass {
+              flex-direction: column;
+          }
+  
+          .navbar {
+              position: fixed;
+              left: -280px;
+              height: 100%;
+              transition: left 0.3s ease;
+              z-index: 1000;
+          }
+  
+          .navbar.active {
+              left: 0;
+          }
+  
+          .main-content {
+              width: 100%;
+          }
+  
+          .toggle-sidebar {
+              display: block !important;
+          }
+      }
+  
+      .toggle-sidebar {
+          display: none;
+          position: fixed;
+          left: 1rem;
+          top: 1rem;
+          z-index: 1001;
+          background-color: var(--nav-button);
+          border: none;
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .navbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .links {
+        overflow-y: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .links::-webkit-scrollbar {
+        display: none;
+    }
+
+    .user:hover {
+        background-color: #8DDDEE;
+        cursor: default;
+        filter: none;
+      }
+
+      body #logout {
+        padding: 0.2rem 1.5rem;
+        width: 90%;
+        height: 50%;
+      }
+
+      #logout_window h1 {
+        font-size: 1.8rem;
+    }
+
+    #logout_dim #logout_window {
+        height: 12rem;
+    }
+    
+    #logout_window button {
+        width: auto;
+        line-height: normal;
+    }
+      
+  </style>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <main>
+      <section class="glass">
+        {% include "includes/adminNav.html" %}
+        <!-- here is the rest of the DB -->
+        <div class="dashbord">
+          <div class="dash1">
+            {% block dash1 %}{% endblock %}
+          </div>
+          <div class="dash2">
+            {% block dash2 %}{% endblock %}
+          </div>
+        </div>
+      </section>
+    </main>
+    {% block popups %}{% endblock %}
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

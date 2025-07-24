@@ -1,0 +1,17 @@
+{% load static %}
+
+<!-- [Az] used htmx to lode trips by category  -->
+<div class="cat-folder" id="category-{{ category.id }}" 
+    style="background-color: {{ category.color }};"
+    hx-get="{% url 'user_app:myTrips' %}?cat_id={{ category.id }}"
+    hx-target="#main-display"
+    hx-swap="innerHTML">
+    
+        {% if category.img %}
+            <img class="f-img" src="{{ category.img.url }}" alt="{{ category.name }}">
+        {% else %}
+            <img class="f-img" src="{% static 'images/default-img.png' %}" alt="No image">
+        {% endif %}
+        <h1 id="cat-color-text">{{ category.name }}</h1>
+</div>
+

@@ -1,0 +1,57 @@
+{% load static %}
+
+
+
+<div class="db2">
+  <div class="trip-lests">
+    <div class="trip-listName"> <h1 id="trip-heder">My Trips</h1> </div>
+    
+    <div class="trip-btn">
+    <!-- If inside category -->
+    {% if selected_category %}
+    <button class="add-trip" id="openTripFormC" 
+        {% if not selected_category %}style="display: none;"{% endif %}
+        
+          hx-get="{% url 'user_app:add_trip_cat' selected_category.id %}"
+        
+        hx-target="#modalT"
+        hx-swap="innerHTML">Add Trips</button>
+    {% endif %}
+
+    <!-- If in main area -->
+    <button class="add-trip" id="openTripForm" 
+      {% if selected_category %}
+        style="display: none;" 
+      {% endif %}
+      {% if main_area %}
+        hx-get="{% url 'user_app:add_trip_main' main_area.id %}"
+        hx-target="#modalT"
+        hx-swap="innerHTML">Add Trip
+          {% else %}
+          disabled
+          {% endif %}
+      </button>
+      
+      <!-- Modal -->
+      <div id="modalT"></div> <!-- The form will be inserted here -->
+      <div id="delet_trip_modal"></div>
+
+    </div>
+  </div>
+      
+
+  <!-- [Az]for the trip lists -->
+  <div class="trip-lists-scroll">
+    <button class="scroll-btn-y up-btn"><img src="{% static 'images/icons/scrol-up.png' %}" alt="▲" class="scrol-img"></button>
+    <div class="trip-folders snaps-vertical">
+      <!--Trips will lest here -->
+      <!-- [Az]this part is the card display for the Trips that is shown in the Trip list-->
+          {% for trip in uncategorized_trips %}
+            {% include 'partials/TripCard.html' with trip=trip %}
+          {% endfor %}
+
+    </div>
+    <button class="scroll-btn-y down-btn"><img src="{% static 'images/icons/scrol-down.png' %}" alt="▼" class="scrol-img"></button>
+  </div>
+</div>
+</div>

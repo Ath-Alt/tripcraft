@@ -1,0 +1,129 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-bell me-2"></i>Notifications
+                    </h3>
+                    <span class="badge bg-white text-primary rounded-pill">
+                        {{ unread_count }} Unread
+                    </span>
+                </div>
+                <div class="card-body p-0">
+                    {% if notifications %}
+                        <div class="notification-list">
+                            {% for notification in notifications %}
+                            <div class="notification-item {% if not notification.is_read %}unread{% endif %} px-4 py-3 border-bottom">
+                                <div class="d-flex w-100 justify-content-between align-items-start mb-2">
+                                    <div class="d-flex align-items-center">
+                                        {% if notification.notification_type == 'system' %}
+                                            <span class="badge bg-info-soft text-info me-2 rounded-circle p-2">
+                                                <i class="fas fa-cog"></i>
+                                            </span>
+                                            <h5 class="mb-0 text-info">System Notification</h5>
+                                        {% else %}
+                                            <span class="badge bg-success-soft text-success me-2 rounded-circle p-2">
+                                                <i class="fas fa-plane"></i>
+                                            </span>
+                                            <h5 class="mb-0 text-success">Trip Reminder</h5>
+                                        {% endif %}
+                                    </div>
+                                    <small class="text-muted ms-3">
+                                        {{ notification.notification_date|date:"M d, Y H:i" }}
+                                    </small>
+                                </div>
+                                <p class="mb-3 text-muted">{{ notification.message }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        {% if notification.traveler %}
+                                        <img
+                                            src="{{ notification.traveler.profile_picture.url|default:'/static/img/default-avatar.png' }}"
+                                            class="rounded-circle me-2"
+                                            width="30"
+                                            height="30"
+                                            alt="{{ notification.traveler.user.username }}"
+                                        >
+                                        <small class="text-muted">
+                                            {{ notification.traveler.user.username }}
+                                        </small>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if not notification.is_read %}
+                                    <a href="{% url 'admin_app:mark_notification_read' notification.pk %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-check me-1"></i>Mark as Read
+                                    </a>
+                                    {% else %}
+                                    <small class="text-muted">
+                                        <i class="fas fa-check-double me-1"></i>Read
+                                    </small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-center py-3">
+{% include 'admin/pagination.html' with page_obj=notifications %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <div class="mb-4">
+                                <i class="fas fa-bell-slash fa-5x text-muted"></i>
+                            </div>
+                            <h4 class="mb-3">No Notifications</h4>
+                            <p class="text-muted">Your notifications and trip reminders will appear here</p>
+                            <a href="{% url 'admin_app:dashboard' %}" class="btn btn-primary mt-3">
+                                Go to Dashboard
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Notification List Styling */
+    .notification-item {
+        transition: background-color 0.3s ease;
+    }
+
+    .notification-item:hover {
+        background-color: rgba(0,0,0,0.025);
+    }
+
+    .notification-item.unread {
+        border-left: 4px solid #007bff;
+        background-color: rgba(13, 110, 253, 0.05);
+    }
+
+    /* Soft Badge Backgrounds */
+    .bg-info-soft {
+        background-color: rgba(13, 202, 240, 0.1);
+    }
+
+    .bg-success-soft {
+        background-color: rgba(25, 135, 84, 0.1);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .notification-item {
+            flex-direction: column;
+        }
+
+        .notification-item .d-flex {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+    }
+</style>
+{% endblock %}

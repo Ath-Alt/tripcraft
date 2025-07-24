@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Inika:wght@400;700&display=swap');
+/* تنسيق الكارد الرئيسي (الجزء العلوي) */
+.trip-card {
+    width: 100%;
+    max-width: 800px; 
+    background: #f7f9f9;
+    padding: 10px; 
+    border-radius: 8px; 
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+    margin: 0 auto 10px; 
+}
+
+/* user  */
+.user-info {
+    display: flex;
+    align-items: center;         
+    justify-content: flex-start; 
+    border-bottom: 1px solid #eee;
+    width: 100%;                 
+    text-align: left;        
+  }
+  
+  .user-info-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+
+
+.user-info .user-img {
+    width: 50px; 
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info .user-name {
+    font-weight: bold;
+    font-size: 14px; /* تصغير حجم الخط */
+    color: #333;
+}
+
+/* التفاصيل */
+
+.trip-details {
+    width: 90%;
+    margin: 10px auto; 
+    padding: 8px; 
+    background: #f8f9fa;
+    border-radius: 6px; /* ـ border-radius */
+    border-right: 2px solid #13547A; 
+}
+
+.detail-row {
+    display: flex;
+    justify-content: flex-start;
+    padding: 3px 0; 
+    gap: 15px;
+}
+
+.detail-label {
+    font-weight: bold;
+    font-size: 12px; 
+    color: #13547A;
+}
+
+.detail-value {
+    font-weight: bold;
+    font-size: 12px; 
+    color: #555;
+}
+
+
+
+
+/*  likes and share */
+.engagement-metrics {
+    display: flex;
+    gap: 10px; 
+    font-size: 12px; 
+    color: #666;
+    padding: 5px 0; 
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+/* table */
+.container {
+    background-color: #fff;
+    border: 1px solid #87ceeb; 
+    border-radius: 8px;
+    padding: 10px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 800px; /* same as up */
+    margin: 0 auto;
+}
+
+/* تنسيق الشبكة للجداول */
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 أيام في كل صف */
+    gap: 10px; /* المسافة بين المكعبات */
+}
+
+.schedule {
+    text-align: left;
+    background-color: rgba(100,225,227, 0.5); /* خلفية فاتحة للمربع */
+    border: 1px solid #87ceeb; /* إضافة حدود لكل يوم */
+    border-radius: 6px; /* زوايا دائرية للمربع */
+    padding: 8px; /* إضافة padding داخل المربع */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* ظل خفيف للمربع */
+}
+
+h1 {
+    color: #4682b4;
+    font-size: 14px; 
+    margin-bottom: 5px; /* تصغير المسافة */
+}
+
+.schedule p {
+    margin: 3px 0; 
+    font-size: 10px; 
+    color: #333;
+    padding: 2px; 
+    border-left: 2px solid #87ceeb; }
+
+/* زر Back */
+.back-btn {
+    margin-top: 8px; /* تصغير المسافة */
+    padding: 5px 10px; /* تصغير الـ padding */
+    background-color: #f0f8ff;
+    border: 1px solid #87ceeb; /* تصغير الـ border */
+    border-radius: 15px; /* تصغير الـ border-radius */
+    font-size: 12px; /* تصغير حجم الخط */
+    color: #4682b4;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 3px; /* تصغير المسافة */
+}
+
+.back-btn:hover {
+    background-color: #e6f0fa;
+}
+
+/* تنسيق إضافي للأجهزة الصغيرة */
+@media (max-width: 600px) {
+    .trip-card, .container {
+        max-width: 100%;
+        padding: 8px; /* تصغير الـ padding */
+    }
+
+    .user-info .user-name {
+        font-size: 12px; /* تصغير حجم الخط */
+    }
+
+    .detail-label, .detail-value {
+        font-size: 10px; /* تصغير حجم الخط */
+    }
+
+    .photo-gallery img {
+        width: 60px; /* تصغير حجم الصور */
+        height: 60px;
+    }
+
+    .engagement-metrics {
+        font-size: 10px; /* تصغير حجم الخط */
+    }
+
+    h1 {
+        font-size: 12px; /* تصغير حجم العنوان */
+    }
+
+    .schedule p {
+        font-size: 9px; /* تصغير حجم الخط */
+    }
+
+    .back-btn {
+        font-size: 10px; /* تصغير حجم الخط */
+        padding: 4px 8px; /* تصغير الـ padding */
+    }
+
+    .schedule-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 أيام في كل صف للأجهزة الصغيرة */
+    }
+}

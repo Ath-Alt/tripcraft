@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Trips</title>
+  <link rel="stylesheet" href="{% static 'css\Nav.css' %}">
+  <link rel="stylesheet" href="{% static 'css\myTrip\myTrip.css' %}">
+  <link rel="stylesheet" href="{% static 'css\myTrip\myTrip-day.css' %}">
+  <link rel="stylesheet" href="{% static 'css\calender\mydailyView.css' %}">
+  <link rel="stylesheet" href="{% static 'css\form\tri-cat-form.css' %}">
+  <link rel="stylesheet" href="{% static 'css/calender/monthlyCal.css' %}">
+</head>
+<body>
+  <main>
+    <section class="glass">
+
+      {% include "includes/nav.html" %}
+
+      <!-- [Az]here is the rest of the DB -->
+      <div class="dashbord">
+      <!-- [Az] the 1st collomn  -->
+        <div class="dash1">
+          <div class="db1">
+            <!-- [Az] area for the main category and the buttons for add and edit -->
+            <section class="trip-folder-info">
+              <div class="trip-info-img">
+                {% if trip.img %}
+                  <img class="trip-f-img" src="{{ trip.img.url }}" alt="{{ trip.name }}">
+                {% else %}
+                  <img class="trip-f-img" src="{% static 'images/default-img.png' %}" alt="No image">
+                {% endif %}
+                <!-- <img class="trip-i-img" src="icons/Test-img1.png" alt=""> -->
+                <div class="img-shadows"></div>
+              </div>
+              <div class="daily-trip-infos">
+                <div class="trip-name-heder"> <h1 class="trip-heder-Text">{{ trip.name }}</h1></div>
+                <div class="trip-planer-infos">
+                  <div class="desten-info"><p class="trip-planer-info">Destination: <span class="info-planer-output">{{ trip.destination }}</span></p></div>
+                  <div class="trip-planer-date-duration">
+                    <p class="trip-planer-info">Duration: <span class="info-planer-output">{{ trip.duration }} Days</span></p>
+                    <p class="trip-planer-info">Date: <span class="info-planer-output">{{ trip.date }}</span> </p>
+                  </div>
+                </div>
+              </div>
+              <div class="trip-edit-coop-btn">
+                <div class="back-edit-btns"> 
+                  <button class="back-trip-btn" onclick="window.location.href='{% url 'user_app:myTrips' %}'" >Back</button>
+                </div>
+                  <!-- <button class="trip-coop-btn">Invite</button>-->
+              </div>
+              
+            </section>
+            
+            <!-- [Az] this section displays the days -->
+            <div class="scrol-coop">
+              <div class="trip-Creators-D">
+                <div class="creator-avas">
+                  {% if request.user.userprofile.avatar %}
+                    <img class="creator-ava" src="{{ request.user.userprofile.avatar.url }}" alt="Profile Picture">
+                  {% else %}
+                    <img class="creator-ava" src="{% static 'images/default-profile.png' %}" alt="Default Avatar">
+                  {% endif %}
+                </div>
+                <div><p class="creator-name">Creator: <span class="creater-username">{{ request.user.username }}</span></p></div>
+              </div>
+            </div>
+          </div>
+          
+          
+          <div class="db2">
+            <div class="calendar-header">
+              <div class="dayTripHeder"> <h1 id="trip-heder">Daily planer</h1> </div>
+              <div class="diy-left-right">
+                <button class="daily-btn d-lift" id="prevBtn"><img class="scrol-icond" src="{% static 'images/icons/scrol-left.png' %}" alt="◀"></button>
+                <span id="dayLabel"></span>
+                <button class="daily-btn d-right" id="nextBtn"><img class="scrol-icond" src="{% static 'images/icons/scrol-right.png' %}" alt="▶"></button>
+              </div>
+              <button class="daily-btn" id="addEventBtn">＋ Add Event</button>
+            </div>
+
+            <div class="trip-lists-scroll calendarWrapper">
+              <div class="trip-folders snaps-vertical">
+                <div id="calendar" 
+                  data-trip-id="{{ trip.id }}" 
+                  data-duration="{{ trip.duration }}" 
+                  data-start-date="{{ trip.date|default_if_none:''|date:'Y-m-d' }}"
+                  data-has-dates="{% if trip.date %}true{% else %}false{% endif %}">
+                </div>
+                  
+              </div>
+            </div> 
+            
+            <!-- Modal Form -->
+            <div id="eventModal" style="display: none;">
+              <form id="eventForm">
+                <input type="hidden" name="event_id" class="event-input" id="event_id" />
+                <input type="text" name="name" class="event-input" id="event_name" placeholder="Event Name" required />
+                <input type="text" name="location" class="event-input" id="event_location" placeholder="Location" />
+                <input type="time" name="start_time" class="event-input" id="event_start_time" required />
+                <input type="time" name="end_time" class="event-input" id="event_end_time" required />
+                <textarea name="description" class="event-textarea" id="event_description" placeholder="Description"></textarea>
+                <button type="submit" id="eventSubmitButton">Save</button>
+                <button type="button" id="closeModal">Cancel</button>
+                  <!-- DELETE BUTTON -->
+                <button type="button" id="deleteEventButton" style="display: none; background-color: #910303; color: white;">
+                  Delete
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+        <!--[Az] the 2nd colloum for monthly Calender and the map-->
+        <div class="dash2">
+          <!--[Az] Calender and map in dash2 it is included -->
+          {% include "includes/myTripCalMap.html" %}
+        </div> 
+
+      </div>
+    </section>
+
+  </main>
+  <div class="circle1"></div>
+  <div class="circle2"></div>
+      <!-- FullCalendar JS -->
+      <script src=" https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js "></script>
+      <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+      <!-- Axios (optional for future CRUD) -->
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+      <script src="{% static 'js\calender\monthlyView.js' %}"></script>
+      <script src="{% static 'js\calender\tripDailyCal.js' %}"></script>
+      <script src="{% static 'js\daysSlideScroll.js' %}"></script>
+
+      <script>
+        const tripId = {{ trip.id }};
+      </script>
+      
+</body>
+</html>

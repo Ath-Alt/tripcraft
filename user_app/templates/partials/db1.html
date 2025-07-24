@@ -1,0 +1,68 @@
+
+{% load static %}
+
+<div class="db1">
+  <h1 id="cat-heder">Trip Category</h1>
+  <!-- [Az] area for the main category and the buttons for add and edit -->
+  <div class="main-cat-btn">
+    <!-- [Az] the main category area and where the name of the folders will display -->
+    <div class="main-cat">
+      <!-- <h2 id="main-cat-t">Main Category</h2> -->
+      <div class="cat-name"> 
+        {% if selected_category %}
+          <span class="mainCatName" id="cat-name-t">{{ selected_category.name }}</span>
+        {% else %}
+          <span class="mainCatName" id="cat-name-t">Main Category</span>
+        {% endif %}
+        <!--<span class="mainCatName" id="cat-name-t">Main Category</span>--> 
+      </div>
+    </div>
+    <!-- [Az] the buttons to add and edit catogrys -->
+    <div class="cat-btn">
+      <!--Add-->
+      <button 
+        class="add-cat" 
+        id="open-catForm" 
+        data-url="{% url 'user_app:add_category' %}"
+        {% if selected_category %}style="display: none;"{% endif %}
+        hx-get="{% url 'user_app:add_category' %}" 
+        hx-target="#modal" 
+        hx-swap="innerHTML"
+        >Add Category</button>
+        <!--Edit-->
+        {% if selected_category %}
+        <button 
+          class="edit-cat" 
+          hx-get="{% url 'user_app:edit_category' selected_category.id %}"  
+          hx-target="#modal" 
+          hx-swap="innerHTML">
+          <img id="edit-ico" src="{% static 'images/icons/Edit-btn.png' %}" alt="Edit-btn">
+        </button>
+      {% endif %}
+      <!--Back-->
+      <button class="back-main-cat" 
+              hx-get="{% url 'user_app:myTrips' %}" 
+              hx-target="#main-display" 
+              hx-swap="innerHTML"
+              {% if not selected_category %}style="display: none;"{% endif %}>
+        Back to Main
+      </button>
+
+    </div>
+    <div id="modal"></div> <!-- Where the form will appear -->
+    <div id="delet_cat_modal"></div>
+  </div>
+  <!-- [Az] this section will display the categories after the user creat some -->
+  <section class="cat-folders-scroll">
+      <button class="scroll-btn left-btn"><img class="scrol-icon" src="{% static 'images/icons/scrol-left.png' %}" alt="◀"></button>
+      <div class="cat-folders snaps-inline" id="category-list">
+        <!--[Az]this part is the card display for the Categorys that is shown in the cat-folders -->
+        
+        {% for category in categories %}
+        {% include 'partials/TripCatCard.html' with category=category %}
+        {% endfor %}
+        
+      </div>
+      <button class="scroll-btn right-btn"><img class="scrol-icon" src="{% static 'images/icons/scrol-right.png' %}" alt="▶"></button>
+  </section>
+</div>

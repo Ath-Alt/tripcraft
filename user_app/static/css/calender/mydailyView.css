@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Inika:wght@400;700&display=swap');
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 2rem;
+}
+.dayTripHeder{
+    justify-content: left;
+}
+.diy-left-right{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+}
+.daily-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+    width: 9rem;
+    height: 1.875rem;
+    padding: 0.28125rem 0rem;
+    flex-shrink: 0;
+    border-radius: 1.43rem;
+    background: #E1E1E1;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25), 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    border: none;
+    cursor: pointer;
+    font-family: "Inika", cursive;
+    color: #000;
+    text-align: center;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.daily-btn:hover{
+    border-radius: 1.43rem;
+    background: #E1E1E1;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+.daily-btn:active{
+    border-radius: 1.43rem;
+    background: #c7c7c7;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+.d-lift, .d-right{
+    width: 1.2rem;
+    height: 1.7rem;
+    box-shadow: 6px 4px 4.5px 0px rgba(255, 255, 255, 0.15) inset, 1px -1px 7.1px 0px rgba(0, 0, 0, 0.25) inset;
+    border-radius: 1.43rem;
+    filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.31));
+}
+.scrol-icond{
+    width: 10px;
+    height: 15px;
+}
+#dayLabel{
+        display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Inika", cursive;
+    color: #000;
+    text-align: center;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+#calendarWrapper {
+    position: relative;
+}
+
+.scroll-btn {
+    width: 100%;
+    padding: 5px;
+    background-color: #eee;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+
+#eventModal {
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    background: white;
+    padding: 20px;
+    border: 2px solid #aaa;
+    z-index: 1000;
+}
+
+#eventModal form input,
+#eventModal form textarea {
+    display: block;
+    margin: 5px 0;
+    width: 100%;
+}
+/* ================================================== */
+/* [Az] style for daily form */
+#eventModal {
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(216,242,255,1) 100%);
+    box-shadow: 6px 6px 2.4px 0px rgba(255, 255, 255, 0.61) inset, -2px -6px 3.6px 0px rgba(0, 0, 0, 0.25) inset;
+    border-radius: 2rem;
+    padding: 20px;
+    border: none;
+    z-index: 1000;
+}
+#eventModal form input,
+#eventModal form textarea {
+    display: block;
+    margin: 5px 0;
+    width: 100%;
+    border-radius:0.3rem;
+    padding-left: 0.3rem;
+}
+.event-input{
+    height: 1.5rem;
+}
+.event-textarea{
+    height: 6rem;
+    min-width: 18rem;
+    font-size: .9rem;
+}
+/* [Az] for the buttons */
+#closeModal, #eventSubmitButton{
+    display: inline-flex;
+    width: 3.5rem;
+    height: 1.5rem;
+    padding: 0.28125rem 0rem;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-shrink: 0;
+    border-radius: 1rem;
+    background: #E1E1E1;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25), 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    border: none;
+    cursor: pointer;
+}
+
+#deleteEventButton{
+    width: 3.5rem;
+    height: 1.5rem;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25), 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    border-radius: 1rem;
+    border: none;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+#closeModal:hover, #eventSubmitButton:hover, #deleteEventButton:hover {
+    border-radius: 1rem;
+    background: #E1E1E1;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+#closeModal:active, #eventSubmitButton:active, #deleteEventButton:active{
+    border-radius: 1rem;
+    background: #c7c7c7;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+

@@ -1,0 +1,82 @@
+{% load static %}
+
+<div class="overlayT" id="overlayT" style="display:block;" >
+    <div class="form-contaner" id="tripForm">
+        <h2 class="htwotext">Trip Form</h2>
+
+        <div class="form-iner-contaner">
+            <form method="post" 
+                enctype="multipart/form-data"
+                
+                hx-post="{{ hx_post_url }}"
+                hx-target="#modalT" 
+                hx-swap="innerHTML"
+                >
+                {% csrf_token %}
+
+                <div class="row1">
+                    <!-- Trip Name -->
+                    <label class="Trip-name" for="trip-name">Trip Name </label>
+                    <!-- <input class="input" type="text" id="trip-name" maxlength="25" name="trip-name" required> -->
+                    {{trip_form.name}}
+                </div>
+                <div class="row">
+                    <div class="Desten-date-bg">
+                        <!-- Destination -->
+                        <label for="destination">Destination </label>
+                        <!-- <input class="input" type="text" id="destination" name="destination" required> -->
+                        {{trip_form.destination}}
+                    </div>
+                    <div class="duration-color-bg">
+                        <!-- Duration -->
+                        <label for="duration">Duration </label>
+                        <!-- <input class="input" placeholder="in days" type="number" id="duration" name="duration" min="1" required> -->
+                        {{trip_form.duration}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="Desten-date-bg">
+                        <!-- Date -->
+                        <label for="date">Date </label>
+                        <!-- <input class="input" type="date" id="date" name="date" required> -->
+                        {{trip_form.date}}
+                    </div>
+                    <div class="duration-color-bg">
+                        <!-- Color -->
+                        <label for="color">Color </label>
+                        <!-- <input class="input" type="color" id="color" name="color" value="#ff0000"> -->
+                        {{trip_form.color}}
+                    </div>
+                </div>
+                <div class="row1">
+                    <!-- Descriptive text -->
+                    <span class="text-label">Upload Image</span>
+                    <!-- Hidden file input -->
+                    <input type="file" id="image" name="img" accept="image/*" hidden>
+                    <!-- {{trip_form.img}} -->
+                    <!-- Custom button to trigger file upload -->
+                    <label for="image" class="custom-file-label">Browse</label>
+                </div>
+                {% if main_area_id %}
+                    <input type="hidden" name="main_area" value="{{ main_area_id }}" />
+                {% endif %}
+                {% if category_id %}
+                    <input type="hidden" name="category" value="{{ category_id }}" />
+                {% endif %}
+
+                <!-- Buttons -->
+                <div class="buttons">
+                    <button class="btnbtn" type="submit">Save</button>
+                    <button class="btnbtn" type="button" id="cancelBtn" onclick="closeModal()">Cancel</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>  
+
+<script>
+    function closeModal() {
+    document.getElementById('modalT').innerHTML = '';
+    }
+</script>

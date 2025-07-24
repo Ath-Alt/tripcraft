@@ -1,0 +1,213 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-4 px-4">
+    <!-- Animated Page Header with Gradient -->
+    <div class="card mb-4 header-card">
+        <div class="card-body d-flex justify-content-between align-items-center py-3 px-4">
+            <div class="d-flex align-items-center">
+                <div class="icon-container me-3" style="background: linear-gradient(45deg, var(--icon-categories), #FFB74D);">
+                    <i class="fas fa-folder fa-lg text-white"></i>
+                </div>
+                <h3 style="font-family: var(--navfont); margin: 0; font-weight: 700; color: #333;">Manage Categories</h3>
+            </div>
+            <a href="{% url 'admin_app:category_create_form' %}" class="btn add-btn">
+                <i class="fas fa-plus me-2"></i> Add New Category
+            </a>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="border-radius: 1rem; backdrop-filter: blur(1rem); background-color: rgba(255, 255, 255, 0.7);">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Categories Table with Glass Effect -->
+    <div class="card" style="background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3)); backdrop-filter: blur(2rem); border: none; border-radius: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr style="border-bottom: 2px solid rgba(255,255,255,0.5);">
+                            <th>Icon</th>
+                            <th>Category Name</th>
+                            <th>Description</th>
+                            <th>Trip Count</th>
+                            <th>Created Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categories %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.3);">
+                            <td>
+                                <div class="icon-container" style="width: 2.8rem; height: 2.8rem;">
+                                {% if category.icon %}
+                                    <img src="{{ category.icon.url }}" alt="{{ category.name }}" class="category-icon">
+                                {% else %}
+                                    <i class="fas fa-folder" style="color: var(--icon-categories);"></i>
+                                {% endif %}
+                                </div>
+                            </td>
+                            <td style="font-family: var(--navfont); font-weight: 500;">{{ category.name }}</td>
+                            <td>{{ category.description|truncatewords:20 }}</td>
+                            <td><span class="badge bg-primary rounded-pill">{{ category.trips.count }}</span></td>
+                            <td>{{ category.created_at|date:"Y-m-d" }}</td>
+                            <td>
+                                <a href="{% url 'admin_app:category_edit' category.pk %}" class="btn btn-sm" style="background: var(--nav-button); box-shadow: 1px 4px 3px 0px rgba(0, 0, 0, 0.2); border-radius: 2rem; transition: all 0.2s ease; border: none;">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4">
+                                <div style="background: rgba(255,255,255,0.4); padding: 2rem; border-radius: 1rem;">
+                                    <i class="fas fa-folder-open fa-3x mb-3" style="color: var(--icon-categories);"></i>
+                                    <p style="font-family: var(--navfont);">No categories found</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .category-icon {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    /* Match hover effects with the sidebar */
+    .btn:hover {
+        box-shadow: -2px -3px 4px 0px rgba(0, 0, 0, 0.25);
+        transform: translateY(-2px);
+    }
+
+    /* Table row hover effect */
+    tbody tr:hover {
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(1rem);
+    }
+
+    /* Make badge consistent with sidebar badges */
+    .badge {
+        font-weight: bold;
+        padding: 0.4rem 0.8rem;
+    }
+
+
+    /* Enhanced Card Styles */
+    .header-card {
+        background: linear-gradient(135deg, var(--main-color), var(--2nd-color));
+        backdrop-filter: blur(10px);
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .header-card:hover {
+        box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+
+    .main-card {
+        background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
+        backdrop-filter: blur(10px);
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        overflow: hidden;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    /* Button Styles */
+    .add-btn {
+        background: linear-gradient(45deg, var(--nav-color1), var(--nav-color2));
+        color: white;
+        box-shadow: 0 4px 15px rgba(73, 170, 244, 0.3);
+        border-radius: 2rem;
+        padding: 0.6rem 1.5rem;
+        border: none;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .add-btn:hover {
+        box-shadow: 0 8px 20px rgba(73, 170, 244, 0.4);
+        transform: translateY(-2px);
+    }
+
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        margin: 0 3px;
+    }
+
+    .edit-btn {
+        background-color: rgba(52, 152, 219, 0.1);
+        color: #3498db;
+    }
+
+    .edit-btn:hover {
+        background-color: #3498db;
+        color: white;
+        box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+    }
+
+    .view-btn {
+        background-color: rgba(46, 204, 113, 0.1);
+        color: #2ecc71;
+    }
+
+    .view-btn:hover {
+        background-color: #2ecc71;
+        color: white;
+        box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+    }
+
+    .delete-btn {
+        background-color: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+    }
+
+    .delete-btn:hover {
+        background-color: #e74c3c;
+        color: white;
+        box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+    }
+
+    .filter-btn {
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 1.5rem;
+        padding: 0.4rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+</style>
+{% endblock %}

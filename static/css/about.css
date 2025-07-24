@@ -1,0 +1,78 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+header {
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 28px;
+}
+
+nav .logo {
+    color: white;
+    font-size: 1.5em;
+    margin: 0;
+    position: relative;
+    left: -30%;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #80d0c7;
+    padding: 15px 20px;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+}
+
+nav a {
+    color: white !important; 
+    font-weight: normal !important; 
+    margin: 0 15px !important; 
+    text-decoration: none !important; 
+    padding: 5px 10px !important;
+    border-radius: 5px !important;
+}
+
+nav a:hover {
+    background-color: white !important; /* لون الخلفية عند التمرير */
+    color: #80d0c7 !important; 
+    border-radius: 5px !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important; /* إضافة تأثير الظل */
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: rgba(128, 208, 199, 0.8) !important; /* مع شفافية 80% */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 10px !important;
+    text-align: center !important;
+    color: whitesmoke !important; /* النص داخل البوكس أبيض */
+    font-weight: bold !important;
+}
+
+h2 {
+    color: whitesmoke!important; /* عنوان   */
+}
+
+footer p {
+    margin: 5px;
+    font-size: 14px;
+}
+
+/* إضافة بوكس سماوي في النص مع شفافية أقل */
+.box-content {
+    background-color: rgba(128, 208, 199, 0.6) !important; /* شفافية 60% */
+    padding: 20px !important;
+    border-radius: 10px !important;
+    color: whitesmoke !important; /* نص أبيض داخل البوكس */
+    margin-top: 20px !important;
+}

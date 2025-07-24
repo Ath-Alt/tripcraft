@@ -1,0 +1,147 @@
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #80d0c7;
+    padding: 15px 20px;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+}
+nav .logo {
+    color: white;
+    font-size: 1.5em;
+    margin: 0;
+    position: relative;
+    left: -30%;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+nav a:hover {
+    background-color: white !important; /* لون الخلفية عند التمرير */
+    color: #80d0c7 !important; 
+    border-radius: 5px !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important; /* إضافة تأثير الظل */
+}
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    text-align: center;
+    direction: rtl;
+    margin: 0;
+    padding: 0;
+}
+
+/* Welcome Page Styling */
+.welcome-container {
+    margin-top: 100px;
+}
+
+h1 {
+    color: #80D0C7;
+    font-size: 28px;
+}
+
+.logo {
+    width: 200px;
+    margin: 20px 0;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    background: #80D0C7;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #3f998a;
+    color: white;
+}
+
+/* Forms (Register & Login) */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.form-box {
+    background: white;
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+.form-box h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #80D0C7;
+    border: none;
+    color: white;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #62b5a7;
+}
+
+/* Gender Selection */
+.gender {
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .form-box {
+        width: 90%;
+    }
+}
+.register{
+    color: rgb(121, 127, 126);
+    margin-top: 20px;
+}
+.register a{
+color: #3f998a;
+text-decoration: none;
+}
+.register a:hover{
+    text-decoration: underline;
+}

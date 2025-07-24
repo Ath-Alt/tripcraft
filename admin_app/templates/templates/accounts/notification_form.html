@@ -1,0 +1,359 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-primary text-white py-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-bell me-3 fa-2x"></i>
+                        <h3 class="mb-0">Create New Notification</h3>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label for="notification_type" class="form-label">Notification Type <span class="text-danger">*</span></label>
+                            <div class="d-flex">
+                                <div class="form-check me-4">
+                                    <input class="form-check-input" type="radio" name="notification_type" id="system_type" value="system" required>
+                                    <label class="form-check-label" for="system_type">
+                                        <i class="fas fa-cog me-2 text-muted"></i>System Notification
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="notification_type" id="trip_type" value="trip">
+                                    <label class="form-check-label" for="trip_type">
+                                        <i class="fas fa-plane me-2 text-muted"></i>Trip Reminder
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select a notification type
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
+                            <textarea
+                                class="form-control"
+                                id="message"
+                                name="message"
+                                rows="4"
+                                placeholder="Enter notification message"
+                                required
+                            ></textarea>
+                            <div class="invalid-feedback">
+                                Please enter a notification message
+                            </div>
+                            <div class="form-text text-muted mt-2">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Provide a clear and concise message
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="notification_date" class="form-label">Notification Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                <input
+                                    type="datetime-local"
+                                    class="form-control"
+                                    id="notification_date"
+                                    name="notification_date"
+                                >
+                            </div>
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Leave blank to use current date and time
+                            </small>
+                        </div>
+
+                        <div class="card bg-light border-0 mb-4">
+                            <div class="card-body">
+                                <h6 class="card-title mb-3">
+                                    <i class="fas fa-users me-2 text-muted"></i>
+                                    Recipient Selection
+                                </h6>
+
+                                <!-- Recipient type selector -->
+                                <div class="mb-3">
+                                    <label class="form-label">Recipient Category <span class="text-danger">*</span></label>
+                                    <div class="d-flex flex-wrap">
+                                        <div class="form-check me-4 mb-2">
+                                            <input
+                                                class="form-check-input"
+                                                type="radio"
+                                                name="recipient_category"
+                                                id="traveler_category"
+                                                value="traveler"
+                                                checked
+                                            >
+                                            <label class="form-check-label" for="traveler_category">
+                                                <i class="fas fa-plane-departure me-2 text-muted"></i>Travelers
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input
+                                                class="form-check-input"
+                                                type="radio"
+                                                name="recipient_category"
+                                                id="user_category"
+                                                value="user"
+                                            >
+                                            <label class="form-check-label" for="user_category">
+                                                <i class="fas fa-user me-2 text-muted"></i>Users
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Traveler options -->
+                                <div id="traveler_options">
+                                    <div class="form-check mb-3">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="traveler_recipient_type"
+                                            id="single_traveler"
+                                            value="single"
+                                            checked
+                                        >
+                                        <label class="form-check-label" for="single_traveler">
+                                            Send to Specific Traveler
+                                        </label>
+                                    </div>
+
+                                    <div class="recipient-single-traveler">
+                                        <select
+                                            class="form-select"
+                                            id="traveler_id"
+                                            name="traveler_id"
+                                        >
+                                            <option value="">Select a Traveler</option>
+                                            {% for traveler in travelers %}
+                                            <option value="{{ traveler.id }}">
+                                                {{ traveler.user.username }}
+                                                ({{ traveler.user.email }})
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a traveler
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check mt-3">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="traveler_recipient_type"
+                                            id="all_travelers"
+                                            value="all"
+                                        >
+                                        <label class="form-check-label" for="all_travelers">
+                                            Send to All Travelers
+                                        </label>
+                                    </div>
+
+                                    <div class="recipient-all-travelers d-none">
+                                        <input type="hidden" name="send_to_all_travelers" value="1">
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            This notification will be sent to {{ travelers.count }} travelers
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <!-- User options -->
+                                <div id="user_options" class="d-none">
+                                    <div class="form-check mb-3">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="user_recipient_type"
+                                            id="single_user"
+                                            value="single"
+                                            checked
+                                        >
+                                        <label class="form-check-label" for="single_user">
+                                            Send to Specific User
+                                        </label>
+                                    </div>
+
+                                    <div class="recipient-single-user">
+                                        <select
+                                            class="form-select"
+                                            id="user_id"
+                                            name="user_id"
+                                        >
+                                            <option value="">Select a User</option>
+                                            {% for user in users %}
+                                            <option value="{{ user.id }}">
+                                                {{ user.username }}
+                                                ({{ user.email }})
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a user
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check mt-3">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="user_recipient_type"
+                                            id="all_users"
+                                            value="all"
+                                        >
+                                        <label class="form-check-label" for="all_users">
+                                            Send to All Users
+                                        </label>
+                                    </div>
+
+                                    <div class="recipient-all-users d-none">
+                                        <input type="hidden" name="send_to_all_users" value="1">
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            This notification will be sent to {{ users.count }} users
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'admin_app:notification_list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Send Notification
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Recipient category selectors
+    const travelerCategoryRadio = document.getElementById('traveler_category');
+    const userCategoryRadio = document.getElementById('user_category');
+    const travelerOptions = document.getElementById('traveler_options');
+    const userOptions = document.getElementById('user_options');
+
+    // Traveler specific selectors
+    const singleTravelerRadio = document.getElementById('single_traveler');
+    const allTravelersRadio = document.getElementById('all_travelers');
+    const recipientSingleTravelerDiv = document.querySelector('.recipient-single-traveler');
+    const recipientAllTravelersDiv = document.querySelector('.recipient-all-travelers');
+    const travelerSelect = document.getElementById('traveler_id');
+
+    // User specific selectors
+    const singleUserRadio = document.getElementById('single_user');
+    const allUsersRadio = document.getElementById('all_users');
+    const recipientSingleUserDiv = document.querySelector('.recipient-single-user');
+    const recipientAllUsersDiv = document.querySelector('.recipient-all-users');
+    const userSelect = document.getElementById('user_id');
+
+    // Toggle between traveler and user options
+    function toggleRecipientCategory() {
+        if (travelerCategoryRadio.checked) {
+            travelerOptions.classList.remove('d-none');
+            userOptions.classList.add('d-none');
+            // Update validation requirements
+            if (singleTravelerRadio.checked) {
+                travelerSelect.setAttribute('required', '');
+            }
+            userSelect.removeAttribute('required');
+        } else {
+            travelerOptions.classList.add('d-none');
+            userOptions.classList.remove('d-none');
+            // Update validation requirements
+            travelerSelect.removeAttribute('required');
+            if (singleUserRadio.checked) {
+                userSelect.setAttribute('required', '');
+            }
+        }
+    }
+
+    // Toggle traveler recipient type
+    function toggleTravelerRecipientType() {
+        if (singleTravelerRadio.checked) {
+            recipientSingleTravelerDiv.classList.remove('d-none');
+            recipientAllTravelersDiv.classList.add('d-none');
+            travelerSelect.setAttribute('required', '');
+        } else {
+            recipientSingleTravelerDiv.classList.add('d-none');
+            recipientAllTravelersDiv.classList.remove('d-none');
+            travelerSelect.removeAttribute('required');
+        }
+    }
+
+    // Toggle user recipient type
+    function toggleUserRecipientType() {
+        if (singleUserRadio.checked) {
+            recipientSingleUserDiv.classList.remove('d-none');
+            recipientAllUsersDiv.classList.add('d-none');
+            userSelect.setAttribute('required', '');
+        } else {
+            recipientSingleUserDiv.classList.add('d-none');
+            recipientAllUsersDiv.classList.remove('d-none');
+            userSelect.removeAttribute('required');
+        }
+    }
+
+    // Add event listeners
+    travelerCategoryRadio.addEventListener('change', toggleRecipientCategory);
+    userCategoryRadio.addEventListener('change', toggleRecipientCategory);
+    
+    singleTravelerRadio.addEventListener('change', toggleTravelerRecipientType);
+    allTravelersRadio.addEventListener('change', toggleTravelerRecipientType);
+    
+    singleUserRadio.addEventListener('change', toggleUserRecipientType);
+    allUsersRadio.addEventListener('change', toggleUserRecipientType);
+
+    // Form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+});
+</script>
+
+<style>
+    /* Additional Styling */
+    .card-header {
+        background: linear-gradient(to right, #4e73df 0%, #224abe 100%);
+    }
+
+    .form-check-input:checked {
+        background-color: #4e73df;
+        border-color: #4e73df;
+    }
+
+    .form-check-input:focus {
+        border-color: rgba(78, 115, 223, 0.5);
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+</style>
+{% endblock %}

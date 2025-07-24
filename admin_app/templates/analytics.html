@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Analytics{% endblock %}
+{% block head %}<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>{% endblock %}
+{% block dash1 %}
+  <div class="db1">
+    <!-- User activity line graph -->
+    <canvas id="userActivity"> </canvas>
+  </div>
+  <div class="db2">
+    <!-- Feature usage bar graph -->
+    <canvas id="featureUsage"> </canvas>
+  </div>
+{% endblock %}
+{% block dash2 %}
+  <div class="db3">
+    <!-- Engagement type doughnut chart -->
+    <canvas id="engagementType"> </canvas>
+    <!-- Gender distribution pie chart -->
+    <canvas id="genderCount"> </canvas>
+  </div>
+  <div class="db4" id="boxes">
+    <!-- Other insights -->
+    <div class="stat-box">
+      Highest Active Users<span>{{ highest_activity }}</span>
+    </div>
+    <div class="stat-box">
+      Total Accounts<span>{{ total_accounts }}</span>
+    </div>
+    <div class="stat-box">
+      Most Used Feature<span>{{ most_used_feature }}</span>
+    </div>
+    <div class="stat-box">
+      Total Trips<span>{{ total_trips }}</span>
+    </div>
+    <div class="stat-box">
+      Avg Trips/User<span>{{ avg_trips_per_user }}</span>
+    </div>
+    <div class="stat-box">
+      Avg Journey Duration<span>{{ avg_journey_duration }} Days</span>
+    </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+    <!-- Data initialization from backend to JS -->
+    <script>
+      const activity_dates = {{ activity_dates | safe }};
+      const activity_counts = {{ activity_counts | safe }};
+      const female_count = {{ female_count }};
+      const male_count = {{ male_count }};
+      const follow_count = {{ follow_count }};
+      const like_count = {{ like_count }};
+      const feature_names = {{ feature_names | safe}};
+      const feature_clicks = {{ feature_clicks | safe}};
+    </script>
+    <script src="{% static 'js/analytics.js' %}"></script>
+{% endblock %}

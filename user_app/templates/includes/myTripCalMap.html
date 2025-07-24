@@ -1,0 +1,25 @@
+{% load static %}
+
+    <div class="db3">
+        <div id="calendarM"></div>
+    </div>
+
+    
+    <div class="db4">
+        <!-- map go here -->
+        <div id="map"></div>
+    </div>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+      .emoji-icon {
+        font-size: 18px;
+        text-align: center;
+        line-height: 20px;
+      }
+    </style>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script src="{% static 'js\calender\map.js' %}"></script>
+    

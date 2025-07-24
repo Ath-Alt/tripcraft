@@ -1,0 +1,115 @@
+
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="row">
+        <!-- Ticket Details -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Ticket Details #{{ ticket.id }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Subject</label>
+                        <p class="font-weight-bold">{{ ticket.subject }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <p>{{ ticket.description }}</p>
+                    </div>
+                    <form method="post" class="mb-3">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select name="status" class="form-select" onchange="this.form.submit()">
+                                {% for status, label in ticket.STATUS_CHOICES %}
+                                <option value="{{ status }}" {% if ticket.status == status %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" name="update_status" value="1">
+                        </div>
+                    </form>
+                    <form method="post" class="mb-3">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Assigned To</label>
+                            <select name="assigned_to" class="form-select" onchange="this.form.submit()">
+                                <option value="">Unassigned</option>
+                                {% for user in staff_users %}
+                                <option value="{{ user.id }}" {% if ticket.assigned_to.id == user.id %}selected{% endif %}>
+                                    {{ user.username }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" name="assign_ticket" value="1">
+                        </div>
+                    </form>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Traveler:</strong>
+                        <a href="{% url 'admin:traveler_detail' ticket.traveler.pk %}">
+                            {{ ticket.traveler.user.username }}
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Created Date:</strong>
+                        {{ ticket.created_at|date:"Y-m-d H:i" }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Last Update:</strong>
+                        {{ ticket.updated_at|date:"Y-m-d H:i" }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Priority:</strong>
+                        <span class="badge bg-{{ ticket.priority }}">
+                            {{ ticket.get_priority_display }}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Conversation -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Conversation</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chat-messages mb-4" style="max-height: 600px; overflow-y: auto;">
+                        {% for response in responses %}
+                        <div class="message {% if response.is_staff_response %}message-staff{% else %}message-user{% endif %} mb-3">
+                            <div class="message-header d-flex justify-content-between">
+                                <strong>{{ response.responder.username }}</strong>
+                                <small class="text-muted">{{ response.created_at|date:"Y-m-d H:i" }}</small>
+                            </div>
+                            <div class="message-content mt-1">
+                                {{ response.message|linebreaks }}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-center text-muted">No responses yet</p>
+                        {% endfor %}
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Add Response</label>
+                            <textarea name="message" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" name="add_response" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Response
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

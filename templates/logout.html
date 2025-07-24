@@ -1,0 +1,24 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/logout.css' %}">
+<button id="logout" class="utl">
+  {% if 'admin_app' in request.path %}
+    <div class="icon-container">
+        <i class="fas fa-sign-out-alt fa-lg" style="color: var(--icon-logout);"></i>
+    </div>
+  {% else %}
+    <img src="{% static 'images/icons/10-logOut.png' %}" width="50">
+  {% endif %}
+
+    <h2>Log Out</h2>
+  </button>
+  <div id="logout_dim">
+    <div id="logout_window">
+      <h1>Are you sure you want to logout?</h1>
+      <form action="/logout/" method="post">
+        {% csrf_token %}
+      <button id="logout_submit" type="submit">Log out</button>
+      <button id="logout_cancel" type="button">Cancel</button>
+      </form>
+    </div>
+  </div>
+  <script src="{% static 'js/logout.js' %}"></script>

@@ -1,0 +1,123 @@
+body {
+    margin: 0; /* Remove default margin */
+    font-family: Arial, sans-serif; /* Set font family */
+    background-color: white; /* Set background color */
+    color: black; /* Set text color */
+    text-align: center; /* Center align text */
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Arrange items in a column */
+    justify-content: center; /* Center items vertically */
+    height: 100vh; /* Full viewport height */
+    }
+    
+    /* Background properties for body */
+    body {
+    background-size: cover; /* Cover the entire background */
+    background-position: center; /* Center the background */
+    background-repeat: no-repeat; /* Prevent repeating the background */
+    }
+    
+    /* Navigation bar styling */
+    nav {
+    display: flex; /* Use flexbox for navigation items */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    background-color: #80d0c7; /* Set background color for nav */
+    padding: 15px 20px; /* Add padding inside nav */
+    position: absolute; /* Position nav at the top */
+    width: 100%; /* Full width */
+    top: 0; /* Align to the top */
+    z-index: 1; /* Ensure it is above other elements */
+    }
+    
+    /* Logo styling in the navigation */
+    nav .logo {
+    color: white; /* Set logo text color */
+    font-size: 1.5em; /* Set logo font size */
+    margin: 0; /* Remove margin */
+    position: relative; /* Position it relative for adjustments */
+    left: -30%; /* Adjust position to the left */
+    }
+    
+    /* Styling for navigation links */
+    nav a {
+    color: white; /* Set link text color */
+    text-decoration: none; /* Remove underline */
+    padding: 10px 15px; /* Add padding around links */
+    margin: 0 10px; /* Margins between links */
+    transition: color 0.3s; /* Smooth color transition on hover */
+    }
+    
+    /* Hover effect for navigation links */
+    nav a:hover {
+        background-color: white !important; /* لون الخلفية عند التمرير */
+        color: #80d0c7 !important; 
+        border-radius: 5px !important;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important; /* إضافة تأثير الظل */
+    }
+    
+    /* Main heading styling */
+    h1 {
+    font-size: 3em; /* Set font size for heading */
+    margin: 10px 0 0; /* Margin around heading */
+    }
+    
+    /* Paragraph styling */
+    p {
+    font-size: 1.2em; /* Set font size for paragraphs */
+    margin: 0.5em 0; /* Margin around paragraphs */
+    }
+    
+    /* Button styling */
+    button {
+    width: 100px; /* Set button width */
+    height: 100px; /* Set button height */
+    margin-top: 50px; /* Margin above button */
+    padding: 30px; /* Padding inside button */
+    font-size: 0.9em; /* Set font size */
+    color: black; /* Set text color */
+    background-color: #80d0c7; /* Set button background color */
+    border: none; /* Remove border */
+    border-radius: 80px; /* Rounded corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s; /* Smooth background color transition */
+    position: relative; /* Position relative for adjustments */
+    left: 45%; /* Center button horizontally */
+    }
+    
+    /* Hover effect for buttons */
+    button:hover {
+    background-color: #e0e0e0; /* Change background on hover */
+    }
+    
+    /* Footer styling */
+    footer {
+    position: absolute; /* Position footer at the bottom */
+    left: 20px; /* Align to the left */
+    bottom: 20px; /* Align to the bottom */
+    text-align: left; /* Left align text in footer */
+    font-size: 14px; /* Set font size */
+    }
+    
+    /* Paragraph styling in the footer */
+    footer p {
+    margin: 5px; /* Margin around footer paragraphs */
+    }
+    
+    /* Responsive styles for mobile screens */
+    @media (max-width: 600px) {
+    h1 {
+    font-size: 2.5em; /* Smaller font size for heading */
+    }
+    p {
+    font-size: 1em; /* Smaller font size for paragraphs */
+    }
+    button {
+    padding: 8px 16px; /* Adjust button padding */
+    font-size: 0.8em; /* Smaller font size for buttons */
+    }
+    .register-button {
+    font-size: 0.8em; /* Smaller font size for register button */
+    }
+    }
+    

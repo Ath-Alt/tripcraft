@@ -1,0 +1,542 @@
+@import url('https://fonts.googleapis.com/css2?family=Inika:wght@400;700&display=swap');
+
+* {
+    box-sizing:border-box;
+    font-family: sans-serif;
+}
+:root{
+    /* fonts */
+    --TCFont: "Inika", cursive;
+}
+
+
+.dash1, .dash2{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 50%;
+    max-width: 100%;
+}
+.db1{
+    flex:1.5;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.db2{
+    flex:3;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    height: 60vh;
+    gap: 1rem;
+}
+
+/* [Az] for the Trip Category heder */
+#cat-heder{
+    color: #000;
+    text-align: center;
+    font-family: Inika;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+/* [Az] for the main category and the buttons */
+.main-cat-btn{
+    display: inline-flex;
+    margin-left: 0.1rem;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+/* [Az] main category */
+.main-cat{
+    flex: 2;
+    display: inline-flex;
+    height: 2.3rem;
+    padding: 0.6rem .3rem 0.6rem .3rem;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 0.7rem;
+    background: #abe2f6;
+    backdrop-filter: blur(2rem);
+}
+
+#main-cat-t{
+    justify-content: left;
+    font-size: 1rem !important;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.cat-name{
+    justify-content: right;
+    width: 14rem;
+    height: 1.6rem;
+    border-radius: 0.4375rem;
+    background: #FFF;
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+#cat-name-t{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--TCFont);
+    font-weight: 700;
+}
+
+
+/* [Az] category buttons */
+.cat-btn{
+    flex: 1;
+    display: inline-flex;
+    justify-content: right;
+    align-items: center;
+    padding: 0.2rem 1rem;
+    gap: .5rem;
+}
+
+.add-cat, .back-main-cat, .add-trip{
+    display: flex;
+    width: 6rem;
+    height: 1.5rem;
+    padding: 0.28125rem 0rem;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 2rem;
+    background: #E1E1E1;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25), 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    border: none;
+    cursor: pointer;
+    font-family: var(--TCFont);
+    color: #000;
+    text-align: center;
+    font-size: .8rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+#edit-ico{
+    width: .9rem;
+    height: .9rem;
+    flex-shrink: 0;
+    aspect-ratio: 1/1;
+}
+
+.edit-cat{
+    display: inline-flex;
+    padding: 0.4rem 1.3rem;
+    justify-content: center;
+    width: 3rem;
+    height: 1.5rem;
+    align-items: center;
+    border-radius: 2rem;
+    background: #E1E1E1;
+    border: none;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25), 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+.add-cat:hover, .edit-cat:hover, .back-main-cat:hover, .add-trip:hover{
+    border-radius: 2rem;
+    background: #E1E1E1;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+.add-cat:active, .edit-cat:active, .back-main-cat:active, .add-trip:active{
+    border-radius: 2rem;
+    background: #c7c7c7;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+/* [Az] category section */
+.cat-folders-scroll {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: inherit;
+    max-width: 100%;
+    height: 10rem;
+    /* flex-shrink: 0; */
+    border-radius: 1.2rem;
+    background: linear-gradient(to right bottom, rgba(73,170,244, 0.3), rgba(100,225,227, 0.38));
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    position: relative;
+    overflow: hidden; /* [Az] Prevent container from expanding */
+}
+
+.cat-folders{
+    --_spacer: 0.99rem; /* [Az] custom prop */
+    margin-left: .3rem;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax( 7rem, 1fr);
+
+    gap: .5rem;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    padding: 0  1rem .5rem;
+    scrollbar-width: none; /* [Az] Hides scrollbar in Firefox */
+    justify-content: start; /* [Az] Ensures the first folder starts from the left */
+}
+
+/* [Az] Hide scrollbar for WebKit browsers */
+.cat-folders::-webkit-scrollbar {
+    display: none;
+}
+
+.cat-folder{
+    display: grid;
+    margin-top: 10px;
+    grid-template-columns: 1fr;
+    gap: .3rem;
+    height: 8.5rem;
+    padding: .5rem;
+    width: 7rem; /* [Az] Keeps folders uniform in size */
+    min-width: 7rem;
+    background: #B9E8B9;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px -3px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    border-radius: var(--_spacer);
+    cursor: pointer;
+}
+.cat-folder > img {
+    inline-size: 100%;
+    border-radius: .5rem;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+}
+
+.f-img{
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.6);
+}
+
+h1 {
+    font-family: var(--TCFont);
+    font-size: 1rem;
+    text-align: center;
+}
+.cat-folder:hover{
+    box-shadow: 2px -4px 5px 2px rgba(210, 210, 212, 0.20) inset, -2px 3px 3px 2px rgba(0, 0, 0, 0.25) inset;
+}
+
+.snaps-inline{
+    scroll-snap-type: inline mandatory;
+    scroll-padding-inline: 1rem;
+}
+
+.snaps-inline > * {
+    scroll-snap-align: start;
+}
+
+/* [Az] Scroll buttons */
+.scroll-btn {
+    position: absolute;
+    width: 1.2rem;
+    height: 100%;
+    border: none;
+    /* background: rgba(255, 255, 255, 0.9); */
+    background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3));
+    backdrop-filter: blur(2rem);
+    box-shadow: 0px 0px 5.4px 0px rgba(0, 0, 0, 0.25) inset, 4px 3px 7.3px 0px rgba(0, 0, 0, 0.25) inset;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10; /* [Az] Keeps buttons above other content */
+}
+
+.scrol-icon{
+    width: 15px;
+    height: 20px;
+}
+
+/* [Az] Left and Right Button Positions */
+.left-btn {
+    left: 0;
+    border-radius: 20px 0px 0px 20px;
+}
+.right-btn {
+    right: 0;
+    border-radius: 0px 20px 20px 0px;
+}
+
+/* [Az] Hover Effect */
+.scroll-btn:hover, .scroll-btn-y:hover {
+    background: rgba(100, 100, 100, 0.6);
+}
+
+/* [Az] My Trips */
+.trip-lests{
+    display: inline-flex;
+    height: 2.3rem;
+    /* padding: 0.6rem .3rem 0.6rem .3rem; */
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 0.7rem;
+}
+.trip-listName{
+    flex: 2;
+}
+#trip-heder{
+    display: flex;
+    justify-content: left;
+    padding: 0.2rem 1rem;
+    color: #000;
+    text-align: center;
+    font-family: Inika;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.trip-btn{
+    flex: 1;
+    display: inline-flex;
+    padding: 0.2rem 1rem;
+    justify-content: right;
+    align-items: center;
+}
+
+/* [Az] Trip list Scroll */
+.trip-lists-scroll {
+    display: flex;
+    flex-direction: column; /* Ensure vertical stacking */
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    max-height: 100%; /* Ensure this container doesn't exceed its parent height */
+    height: 100%; /* Ensure it takes up available space */
+    border-radius: 1.2rem;
+    background: linear-gradient(to right bottom, rgba(100,225,227, 0.38), rgba(73,170,244, 0.3));
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    position: relative;
+    overflow: hidden; /* Prevent scrolling outside of this container */
+}
+
+
+/* [Az] Trip folder list */
+.trip-folders{
+    width: 100%;
+    /* height: 100%;*//* Make sure this is flexible */
+    display: grid;
+    grid-auto-flow: row;
+    grid-auto-rows: minmax(7rem, auto);
+    gap: 0.2rem;
+    margin-top: .4rem;
+    margin-bottom: .7rem;
+    padding: 1.3rem .3rem .4rem;
+    overflow-y: auto; /* Enables vertical scrolling inside the container */
+    overscroll-behavior-block: contain;
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+    align-items: start;
+}
+
+.trip-folder {
+    display: grid;
+    grid-template-columns: 7.1rem 7.2rem auto 8.5rem 2rem; /* Adjust based on how many items you want in a row */
+    align-items: center; /* Aligns items vertically */
+    width: 100%;
+    height: 6.8rem;
+    flex-shrink: 0;
+    gap: 0rem;
+    border-radius: 1.0625rem;
+    background: #DDFAB8;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px -3px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    gap: .3rem;
+    padding: .4rem;
+    cursor: pointer;
+}
+
+.trip-folder:hover{
+    box-shadow: 2px -4px 5px 2px rgba(210, 210, 212, 0.20) inset, -2px 3px 3px 2px rgba(0, 0, 0, 0.25) inset;
+    
+}
+
+.trip-img{
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-left: .1rem;
+    width: 7rem;
+    height: auto; /* Add a height to define the container */
+    position: relative; 
+    border-radius: 0.6rem;
+
+    overflow: hidden; 
+}
+.trip-f-img{
+    inline-size: 100%;
+    width: inherit;
+    height: 6rem;
+    border-radius: 0.6rem; /* Keep the image border-radius */
+    object-fit: cover;
+}
+.shadows{
+    display: inline-flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 0.6rem;
+    box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.25) inset;
+}
+.trip-name{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 6rem; */
+}
+.trip-nameText{
+    align-items: center;
+    font-style: normal;
+    font-weight: 700;
+    text-align: center;
+     /* [Az] Ensures text breaks inside the box */
+    word-break: break-word;
+     /* [Az] Alternative for better browser support */
+    overflow-wrap: break-word; 
+}
+
+.trip-infos{
+    display: flex;
+    width: 8.8125rem;
+    height: 5.4375rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    padding: .1rem .1rem .1rem 0.5rem; 
+}
+.trip-info, .info-output{
+    font-family: var(--TCFont);
+    font-size: .9rem;
+    font-weight: 700;
+    
+}
+.info-output{
+    font-weight: 400;
+}
+
+.trip-Creators{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    width: 8.4rem;
+    padding: 0.6rem 0.5rem 0.6rem 0.5rem;
+    gap: 0.70181rem;
+    border-radius: 1rem;
+    background: rgba(156, 156, 156, 0.17);
+    background-blend-mode: multiply;
+    box-shadow: 0px 4px 3px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+.creator-name{
+    font-size: .8rem;
+}
+.creator-ava{
+    width: 35px;
+    height: 35px;
+    border-radius: 5rem;
+}
+
+.trip-edit-delete{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+}
+
+/* [Az] Edit and delete buttons for the trips */
+.trip-delete, .trip-edit{
+    display: flex;
+    width: 1.8rem;
+    height: 1.8rem;
+    padding: 0.3rem;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 0.43rem;
+    background: local;
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25), 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    border: none;
+    cursor: pointer;
+    /* position: absolute;
+    top: 5.5%;
+    left: 90%; */
+
+    border-radius: 50%;
+    /* display: none; */
+}
+#trip-delete, #trip-edit{
+    width: 1rem;
+    height: 1rem;
+}
+.trip-edit:hover, .trip-delete:hover{
+    /* background: #E1E1E1; */
+    box-shadow: 0px 2px 2.1px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+.snaps-vertical {
+    scroll-snap-type: y mandatory; /* Change to vertical scrolling */
+    scroll-padding-block: 1rem; /* Adjust padding for vertical scrolling */
+    overflow-y: auto; /* Enables vertical scrolling */
+    max-height: 100%; /* Prevents overflow */
+}
+
+.snaps-vertical > * {
+    scroll-snap-align: start; /* Each item will snap to the top when scrolling */
+}
+
+/* [Az] scroll up and down buttones */
+.scroll-btn-y{
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    left: 50%;
+    border: none;
+    /* background: rgba(255, 255, 255, 0.9); */
+    background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3));
+    backdrop-filter: blur(2rem);
+    box-shadow: 0px 0px 5.4px 0px rgba(0, 0, 0, 0.25) inset, 4px 3px 7.3px 0px rgba(0, 0, 0, 0.25) inset;
+    box-sizing: border-box;
+    cursor: pointer;
+    transform: translateX(-50%);
+    z-index: 10; /* [Az] Keeps buttons above other content */
+}
+.up-btn{
+    top: 0;
+    border-radius: 20px 20px 0px 0px;
+}
+.down-btn{
+    bottom: 0;
+    border-radius: 0px 0px 20px 20px;
+}
+.scrol-img{
+    width: 17px;
+    height: 12px;
+}
+
+.trip-clikc-ev{
+    display: contents !important;
+}

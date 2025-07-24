@@ -1,0 +1,178 @@
+/* General */
+body {
+    font-family: Arial, sans-serif;
+    color: #19323C;
+    height: 100vh;
+    background: linear-gradient(-30deg, #c1e8e4 40%, #FFFFFF 40.1%);
+    margin: 0;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #80d0c7;
+    padding: 15px 20px;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+}
+nav .logo {
+    color: white;
+    font-size: 1.5em;
+    margin: 0;
+    position: relative;
+    left: -30%;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+nav a:hover {
+    background-color: white !important; /* لون الخلفية عند التمرير */
+    color: #80d0c7 !important; 
+    border-radius: 5px !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important; /* إضافة تأثير الظل */
+}
+ 
+/* Title and description */
+#main {
+    width: 40%;
+    float: left;
+    margin-left: 10rem;
+    margin-top: 10rem;
+    font-size: 2em;
+    font-weight: 500;
+}
+button {
+    cursor: pointer;
+    color: white;
+}
+#form {
+    border-radius: 4rem;
+    border: none;
+    background-color: #80d0c7;
+    padding: 0.5em 1em;
+    font-size: 2rem;
+}
+
+/* Image */
+#original {
+    width: 30%;
+    margin-top: 10rem;
+    margin-right: 10rem;
+    float: right;
+}
+
+/* Dimmed background for popup */
+#dim {
+    width: 100%;
+    height: 100%;
+    background-color: #00000050;
+    position: fixed;
+    display: none;
+}
+
+/* Popup window */
+#window {
+    position: fixed;
+    background: linear-gradient(90deg, #c1e8e4 40%, #FFFFFF 40.1%);
+    border-radius: 2rem;
+    width: 50%;
+    height: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 20px #00000050;
+}
+#left {
+    width: 40%;
+    float: left;
+    text-align: center;
+}
+#right {
+    width: 60%;
+    float: right;
+}
+
+/* Emphasis on "help" */
+span {
+    color: #80d0c7;
+}
+#left img {
+    width: 80%;
+    display:block;
+    margin: auto;
+}
+
+/* Small text color */
+#window p{
+    color: #797596;
+}
+
+/* Email color */
+a {
+    color: #19323C;
+}
+
+/* Exit popup button */
+#cancel {
+    background-color: transparent;
+    border: none;
+    float: right;
+    margin: 1rem;
+    font-size: 1.5rem;
+    color:  #797596;
+}
+
+/* Form fields */
+#right input, textarea {
+    width: 70%;
+    display: block;
+    margin: auto;
+    margin-top: 5%;
+    padding: 3%;
+    border-radius: 1rem;
+    border: none;
+    background-color: #F1F7F9;
+    clear: right;
+    color: #19323C;
+    resize: none;
+    font-family: 'Segoe UI';
+}
+input::placeholder, textarea::placeholder {
+    color: #797596;
+}
+input:focus, textarea:focus {
+    outline: none;
+}
+
+/* Form button */
+#submit {
+    border-radius: 4rem;
+    border: none;
+    background-color: #80d0c7;
+    padding: 0.3em .7em;
+    font-size: 1.5rem;
+    margin-top: 5%;
+    margin-left: 12%;
+}
+
+/* Footer */
+footer {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    text-align: left;
+    font-size: 14px;
+    }
+    footer p {
+    margin: 5px;
+    color: #80d0c7;
+    font-size: 1.2em;
+    }

@@ -1,0 +1,23 @@
+
+
+<div class="del_cat_wrapper" style="display: block;">
+    <div class="del_cat_conteater">
+        <form method="post" class="confirm-del-F"
+            hx-post="{% url 'user_app:delete_category' category.pk %}" 
+            hx-target="#delet_cat_modal" 
+            hx-swap="outerHTML"
+            hx-on="submit: if(!confirm('Are you sure you want to delete this category?')) return false;">
+            {% csrf_token %}
+            
+            <p class="confirm-Del-M">Are you sure you want to delete "{{ category.name }}"?</p>
+            <div class="delBtn-conferm">
+                <button type="submit" class="confirm-Del-Btn"> Yes </button>
+                <button class="confirm-Del-Btn"
+                onclick="document.getElementById('delet_cat_modal').innerHTML = '';">
+                No
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>

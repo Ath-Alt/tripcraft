@@ -1,0 +1,231 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inika:wght@400;700&display=swap');
+        
+        :root {
+            --navfont: "Inika", cursive;
+            --main-color: #80D0C7;
+            --2nd-color: #9BD1FA;
+            --nav-color1: #64E1E3;
+            --nav-color2: #49AAF4;
+            --nav-button: #B8F9FA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(to left top, var(--nav-color2), var(--nav-color1));
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to right bottom, rgba(100,225,227, 0.5), rgba(73,170,244, 0.3));
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.3));
+            backdrop-filter: blur(2rem);
+        }
+
+        .user-profile {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .user-profile img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--nav-button);
+            border-radius: 2rem;
+            /* margin-bottom: 1rem; */
+            box-shadow: 1px 4px 3px 0px rgba(0, 0, 0, 0.41) inset;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            box-shadow: -2px -3px 4px 0px rgba(0, 0, 0, 0.41);
+            transform: translateY(-2px);
+        }
+
+        .nav-item img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .trips-list {
+            margin-top: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2, h3 {
+            font-family: var(--navfont);
+            margin-bottom: 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="user-profile">
+                <img src="{% static 'images/man-user-color-icon.png' %}" alt="User Profile">
+                <h3>{{ user.username }}</h3>
+            </div>
+            
+            <a href="" class="nav-item">
+                <img src="{% static 'images/icons/1-Profile.png' %}" alt="Profile">
+                <span>Profile</span>
+            </a>
+            <a href="" class="nav-item">
+                <img src="{% static 'images/icons/2-Explore.png' %}" alt="Explore">
+                <span>Explore</span>
+            </a>
+            <a href="{% url 'admin_app:my-trips' %}" class="nav-item">
+                <img src="{% static 'images/icons/3-myTrip.png' %}" alt="My Trips">
+                <span>My Trips</span>
+            </a>
+            <a href="" class="nav-item">
+                <img src="{% static 'images/icons/4-Fav.png' %}" alt="Favorites">
+                <span>Favorites</span>
+            </a>
+            <a href="{% url 'admin_app:map' %}" class="nav-item">
+                <img src="{% static 'images/icons/5-map.png' %}" alt="Map">
+                <span>Map</span>
+            </a>
+            
+            <div style="margin-top: auto;">
+                <a href="" class="nav-item">
+                    <img src="{% static 'images/logo.jpg' %}" alt="Settings">
+                    <span>Settings</span>
+                </a>
+               <!-- زر تسجيل الخروج بدون إعادة توجيه -->
+<form id="logoutForm" method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="nav-btn logout-btn">
+        <img src="{% static 'images/logo.jpg' %}" alt="Logout">
+        Logout
+    </button>
+</form>
+
+<script>
+document.getElementById('logoutForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // منع الإرسال التقليدي للنموذج
+
+    const form = this;
+    const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrfToken
+        },
+        body: new URLSearchParams(new FormData(form))
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // تم تسجيل الخروج بنجاح
+            // يمكنك تحديث الواجهة أو إعادة توجيه المستخدم إذا رغبت:
+            alert("تم تسجيل الخروج بنجاح");
+            // window.location.href = '/'; // إعادة توجيه إلى الصفحة الرئيسية إن أردت ذلك
+        } else {
+            alert("حدث خطأ أثناء تسجيل الخروج.");
+        }
+    })
+    .catch(error => {
+        console.error('Error during logout:', error);
+        alert("حدث خطأ أثناء تنفيذ طلب تسجيل الخروج.");
+    });
+});
+</script>
+
+            </div>
+        </div>
+
+        <div class="main-content">
+            <h2>Welcome, {{ user.username }}</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Trips</h3>
+                    <p>{{ total_trips }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Upcoming Trips</h3>
+                    <p>{{ upcoming_trips }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Countries Visited</h3>
+                    <p>{{ countries_visited }}</p>
+                </div>
+            </div>
+
+            <div class="trips-list">
+                <h3>Recent Trips</h3>
+                {% for trip in recent_trips %}
+                <div class="trip-item">
+                    <h4>{{ trip.name }}</h4>
+                    <p>{{ trip.start_date }} - {{ trip.end_date }}</p>
+                    <br />
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,151 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="row">
+        <!-- User Information Card -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    {% if user_detail.traveler.profile_photo %}
+                        <img src="{{ user_detail.traveler.profile_photo.url }}" class="rounded-circle mb-3" width="120">
+                    {% else %}
+                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 120px; height: 120px; font-size: 3rem;">
+                            {{ user_detail.username|make_list|first|upper }}
+                        </div>
+                    {% endif %}
+                    <h4>{{ user_detail.username }}</h4>
+                    <p class="text-muted">{{ user_detail.email }}</p>
+                    
+                    <div class="d-grid gap-2">
+                        <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="toggle_active" value="1">
+                            <button type="submit" class="btn btn-{{ user_detail.is_active|yesno:'danger,success' }} mb-2">
+                                {% if user_detail.is_active %}
+                                    <i class="fas fa-user-slash"></i> Disable Account
+                                {% else %}
+                                    <i class="fas fa-user-check"></i> Enable Account
+                                {% endif %}
+                            </button>
+                        </form>
+                        
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">
+                            <i class="fas fa-key"></i> Reset Password
+                        </button>
+                    </div>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Registration Date</span>
+                        <span>{{ date_joined|date:"Y-m-d" }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Last Login</span>
+                        <span>{{ last_login|date:"Y-m-d H:i"|default:"Never logged in" }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Status</span>
+                        <span class="badge bg-{{ is_active|yesno:'success,danger' }}">
+                            {{ is_active|yesno:'Active,Disabled' }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Account Type</span>
+                        <span class="badge bg-{{ is_staff|yesno:'warning,primary' }}">
+                            {{ is_staff|yesno:'Staff,User' }}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="col-md-8">
+            {% if is_traveler %}
+            <!-- Traveler Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Traveler Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="stat-card p-3 border rounded">
+                                <h6 class="text-muted">Trip Count</h6>
+                                <h3>{{ trips_count }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card p-3 border rounded">
+                                <h6 class="text-muted">Verification Status</h6>
+                                <h3>
+                                    <span class="badge bg-{{ verification_status|yesno:'success,warning' }}">
+                                        {{ verification_status|default:"Not Verified" }}
+                                    </span>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Activity Log -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Activity Log</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <!-- Activity log can be added here -->
+                        <p class="text-muted">No activity recorded</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reset Password Modal -->
+<div class="modal fade" id="resetPasswordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reset Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to reset this user's password?</p>
+                <p class="text-danger">A new random password will be generated.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="reset_password" value="1">
+                    <button type="submit" class="btn btn-danger">Reset</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stat-card {
+        background: white;
+        transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .timeline {
+        position: relative;
+        padding: 20px 0;
+    }
+</style>
+{% endblock %}

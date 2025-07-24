@@ -1,0 +1,76 @@
+{% extends "base_admin.html" %}
+{% load static %}
+
+{% block title %}Manage Categories | TripCraft Admin{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">Categories</li>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Manage Categories</h2>
+        <a href="{% url 'admin_app:category_create_form' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Category
+        </a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Icon</th>
+                            <th>Category Name</th>
+                            <th>Description</th>
+                            <th>Trip Count</th>
+                            <th>Created Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categories %}
+                        <tr>
+                            <td>
+                                {% if category.icon %}
+                                    <img src="{{ category.icon.url }}" alt="{{ category.name }}" class="category-icon" width="40" height="40">
+                                {% else %}
+                                    <i class="fas fa-folder"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ category.name }}</td>
+                            <td>{{ category.description|truncatechars:50 }}</td>
+                            <td>{{ category.trips.count }}</td>
+                            <td>{{ category.created_at|date:"Y-m-d" }}</td>
+                            <td>
+                                <a href="{% url 'admin_app:category_detail' category.pk %}" class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                <a href="{% url 'admin_app:category_edit' category.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No categories found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Monitor Users{% endblock %}
+{% block dash1 %}
+  <div class="db1">
+    <!-- User table (name, email, and staff status) and filter button -->
+    <div class="header">
+      <h1>Users Table</h1>
+      <button id="filter" class="focus">Filter</button>
+    </div>
+    <div id="table">
+      <table>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email Address</th>
+            <th>Staff Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for user in users %}
+          <tr
+            class="user"
+            data-username="{{ user.username }}"
+            data-email="{{ user.email }}"
+            data-staff="{{ user.is_staff }}"
+          >
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.is_staff }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
+{% block dash2 %}
+  <div class="db3" id="general">
+    <!-- Display of user's general details -->
+    <div id="top">
+      <h1>General User Details</h1>
+      <p id="status"></p>
+    </div>
+    <!-- Display of user's avatar + additional details -->
+    <div id="mid">
+      <img
+        class="ava"
+        src="{% static 'images/default-profile.png' %}"
+        width="150"
+        alt=""
+      />
+      <div id="general_details">
+        <p>Name: No user is selected</p>
+        <p>Email: - </p>
+        <p>Staff Status: - </p>
+      </div>
+    </div>
+    <!-- Buttons of user information displayed by JS -->
+    <div id="bottom">
+      <button id="trips" class="focus">Trips</button>
+      <button id="likes" class="focus">Likes</button>
+      <button id="followers" class="focus">Followers</button>
+      <button id="following" class="focus">Following</button>
+    </div>
+  </div>
+  <!-- Display of additional details of the user -->
+  <div class="db4" id="table">
+    <table>
+      <thead>
+        <tr>
+          <th colspan="2">User Specific Details</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Creation date</td>
+          <td>0000-00-00</td>
+        </tr>
+        <tr>
+          <td>Last active</td>
+          <td>0000-00-00</td>
+        </tr>
+        <tr>
+          <td>Trips</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>Following</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>Followers</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>Likes</td>
+          <td>0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+{% block popups %}
+  <!-- Allow users to filter based on specific criteria -->
+  <div id="filter_dim">
+    <div id="filter_window">
+      <button id="filter_cancel">x</button>
+      <h1>Filter Users</h1>
+      <!-- Fields to enter username, email, or staff status to search for a user -->
+      <form id="filter_form">
+        <div>
+          <p>Username</p>
+          <input type="text" name="username" id="username" maxlength="13" />
+        </div>
+        <div>
+          <p>Email</p>
+          <input type="text" name="email" id="email" maxlength="320" />
+        </div>
+        <div>
+          <p>Staff?</p>
+          <input
+            type="checkbox"
+            name="staff_status"
+            id="staff_status"
+            maxlength="320"
+          />
+        </div>
+        <button id="submit_filter">Filter</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Popups of user information from the previous buttons -->
+  <div id="trips_dim">
+    <div id="trips_window">
+      <div id="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Destination</th>
+              <th>Date</th>
+              <th><button id="trips_cancel">x</button></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan=4>Select a user</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="likes_dim">
+    <div id="likes_window">
+      <div id="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Trip name</th>
+              <th>Made by</th>
+              <th><button id="likes_cancel">x</button></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan=3>Select a user</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="followers_dim">
+    <div id="followers_window">
+      <div id="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Followers</th>
+              <th><button id="followers_cancel">x</button></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan=2>Select a user</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="following_dim">
+    <div id="following_window">
+      <div id="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Following</th>
+              <th><button id="following_cancel">x</button></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan=2>Select a user</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+  <script src="{% static 'js/monitor.js' %}"></script>
+{% endblock %}

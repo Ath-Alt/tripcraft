@@ -1,0 +1,40 @@
+{% load static %}
+
+<nav class="navbar">
+  <div class="user">
+    {% if request.user.userprofile.avatar %}
+      <img class="ava" src="{{ request.user.userprofile.avatar.url }}" alt="Profile Picture">
+    {% else %}
+      <img class="ava" src="{% static 'images/default-profile.png' %}" alt="Default Avatar">
+    {% endif %}
+    <h3 id="username-display">{{ request.user.username }}</h3>
+  </div>
+  <div class="links">
+
+    <a class="navA" href="{% url 'user_app:profile' %}"><div class="link">
+      <img class="icons" src="{% static 'images/icons/1-Profile.png' %}"  alt="profile">
+      <h2>Profile</h2>
+    </div></a>
+    <a class="navA"  href="{% url 'user_app:explore' %}"><div class="link">
+      <img class="icons" src="{% static 'images/icons/2-Explore.png' %}" width="50" alt="Explore">
+      <h2>Explore</h2>
+    </div> </a>
+    <a class="navA"  href="{% url 'user_app:myTrips' %}"><div class="link">
+      <img class="icons" src="{% static 'images/icons/3-myTrip.png' %}" height="50" alt="My Trip">
+      <h2>My Trips</h2>
+    </div></a>
+    <a class="navA"  href="{% url 'user_app:favorites' %}"><div class="link">
+      <img class="icons" src="{% static 'images/icons/4-Fav.png' %}" height="50" alt="Fav">
+      <h2>Favorites</h2>
+    </div></a>
+    <!--
+    <a class="navA"  href="UDB-Map.html"><div class="link">
+      <img class="icons" src="{% static 'images/icons/5-map.png' %}" height="50" alt="Map">
+      <h2>Map</h2>
+    </div></a>-->
+  </div>
+  <div class="utls">
+    {% include 'settings.html' %}
+    {% include 'logout.html' %}
+  </div>
+</nav>

@@ -1,0 +1,77 @@
+
+
+{% load static %}
+<!-- [Az] this for Category form for easy use-->
+<div class="overlay" id="overlay" style="display:block;">
+  <div class="form-contaner-cat">
+    <h2 class="htwotext">Trip Category</h2>
+      {% if cat_form.instance.pk %}
+        <div class="delet">
+          <button class="btnbtn" id="deleteBtn"
+            hx-get="{% url 'user_app:confirm_delete' cat_form.instance.pk %}" 
+            hx-target="#delet_cat_modal" 
+            hx-trigger="click" 
+            hx-swap="innerHTML">
+            <img class="delicon" src="{% static 'images/icons/garbage.png' %}" alt="Delete">
+          </button>
+        </div>
+      {% endif %}
+      <div class="form-iner-contaner-cat">
+      <form 
+        method="post" 
+        id="categoryForm" 
+        enctype="multipart/form-data"
+        {% if category %}
+          action="{% url 'user_app:edit_category' category.id %}"
+          hx-post="{% url 'user_app:edit_category' category.id %}"
+        {% else %}
+          action="{% url 'user_app:add_category' %}"
+          hx-post="{% url 'user_app:add_category' %}"
+        {% endif %}
+        hx-target="#modal"
+        hx-swap="outerHTML"
+      >
+        {% csrf_token %}
+        {{ cat_form.non_field_errors }}
+
+        <!-- Name -->
+        <div class="row1">
+          <label class="label Category-name" for="{{ cat_form.name.id_for_label }}">Category Name</label>
+          {{ cat_form.name }}
+          {{ cat_form.name.errors }}
+        </div>
+
+        <!-- Image and Color -->
+        <div class="row">
+          <div class="Desten-date-bg">
+
+            <span class="text-label">Upload Image</span>
+            <!-- Hidden file input -->
+            <input type="file" id="image" name="img" accept="image/*" hidden>
+            <!-- Custom button to trigger file upload -->
+            <label for="image" class="custom-file-label-cat">Browse</label>
+          </div>
+
+          <div class="duration-color-bg">
+            <label class="label" for="{{ cat_form.color.id_for_label }}">Color</label>
+            {{ cat_form.color }}
+            {{ cat_form.color.errors }}
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="buttons">
+          <button class="btnbtn" type="submit">Save</button>
+          <button class="btnbtn" type="button" id="cancelBtn" onclick="closeModal()">Cancel</button>
+        </div>
+
+
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  function closeModal() {
+    document.getElementById('modal').innerHTML = '';
+  }
+</script>

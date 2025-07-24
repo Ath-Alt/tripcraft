@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore</title>
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/explore/explore.css' %}">
+</head>
+<body>
+    <main>
+        <section class="glass">
+            {% include "includes/nav.html" %}
+            <div class="dashbord">
+                <div class="dash1">
+                    <div class="db1">
+                        <nav>
+                            <a href="{% url 'user_app:explore' %}" class="btn-link" id="explore-link">Explore</a>
+                            <a href="{% url 'user_app:following_explore' %}" class="btn-link" id="following-link">Following</a>
+                        </nav>
+
+                        <div class="search-bar">
+                            <form action="{% url 'user_app:explore' %}" method="get">
+                                <input type="text" id="search-input" name="q" placeholder="Search destinations..." value="{{ query }}" onkeyup="suggestCountries()">
+                                <ul id="suggestions" class="suggestion-list"></ul>
+                                <button type="submit">Search</button>
+                            </form>
+                        </div>
+
+                        <div class="container">
+                            {% for trip in trips %}
+                            <a href="{% url 'user_app:explore_card' trip.id %}" class="trip-card-link">
+                                <div class="trip-card">
+                                    <div class="user-info">
+                                        {% if trip.user.userprofile.avatar %}
+                                            <img class="user-img" src="{{ trip.user.userprofile.avatar.url }}" alt="User Profile Picture">
+                                        {% else %}
+                                            <img class="user-img" src="{% static 'images/default-profile.png' %}" alt="Default Avatar">
+                                        {% endif %}
+                                        <span class="user-name">{{ trip.user.username }}</span>
+                                    </div>
+                                    {% if trip.img %}
+                                        <img class="trip-img" src="{{ trip.img.url }}" alt="Trip Image">
+                                    {% else %}
+                                        <img class="trip-img" src="{% static 'images/default-img.png' %}" alt="Default Trip Image">
+                                    {% endif %}
+                                    <div class="trip-content">
+                                        <div class="trip-name">{{ trip.name }}</div>
+                                    </div>
+                                    <div class="trip-details">
+                                        Destination: {{ trip.destination }}<br>
+                                        Duration: {{ trip.duration }} Days<br>
+                                        Date: {{ trip.date|date:"F j, Y" }}
+                                    </div>
+                                    <div class="card-actions">
+                                        <button class="action-btn like-btn" data-trip-id="{{ trip.id }}" data-liked="{% if request.user in trip.favoritetrip_set.all %}true{% else %}false{% endif %}">
+                                            <img src="{% static 'images/icons/Fav-Travel.png' %}" alt="Like">
+                                        </button>
+                                        <button class="action-btn follow-btn" data-follow-id="{{ trip.user.id }}" data-following="{% if trip.user in request.user.following.all %}true{% else %}false{% endif %}">
+                                            <img src="{% static 'images/icons/follow.png' %}" alt="Follow">
+                                        </button>
+                                    </div>
+                                </div>
+                            </a>
+                            {% empty %}
+                            <p>No trips found.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+    <script src="{% static 'js/explore/explore.js' %}"></script>
+</body>
+</html>

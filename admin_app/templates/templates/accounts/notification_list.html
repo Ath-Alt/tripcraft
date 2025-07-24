@@ -1,0 +1,264 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid px-4 py-3">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-6">
+            <h2 class="d-flex align-items-center">
+                <span class="me-3 text-primary">
+                    <i class="fas fa-bell fa-2x"></i>
+                </span>
+                Notification Management
+            </h2>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <a href="{% url 'admin_app:notification_create' %}" class="btn btn-primary shadow-sm">
+                <i class="fas fa-plus me-2"></i>Create New Notification
+            </a>
+        </div>
+    </div>
+
+    <!-- Enhanced Quick Statistics -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card card-stat border-0 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <div class="rounded-circle bg-primary-soft p-3 me-3">
+                        <i class="fas fa-bell text-primary fa-2x"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted text-uppercase small mb-2">Total Notifications</h6>
+                        <h3 class="mb-0 text-primary">{{ notifications.count }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stat border-0 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <div class="rounded-circle bg-warning-soft p-3 me-3">
+                        <i class="fas fa-envelope-open text-warning fa-2x"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted text-uppercase small mb-2">Unread</h6>
+                        <h3 class="mb-0 text-warning">{{ unread_count }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stat border-0 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <div class="rounded-circle bg-info-soft p-3 me-3">
+                        <i class="fas fa-cog text-info fa-2x"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted text-uppercase small mb-2">System Notifications</h6>
+                        <h3 class="mb-0 text-info">{{ system_count }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stat border-0 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <div class="rounded-circle bg-success-soft p-3 me-3">
+                        <i class="fas fa-plane text-success fa-2x"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted text-uppercase small mb-2">Trip Reminders</h6>
+                        <h3 class="mb-0 text-success">{{ trip_count }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Improved Notifications Table -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-borderless table-hover mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="text-muted py-3 ps-4">Traveler</th>
+                            <th class="text-muted py-3">Type</th>
+                            <th class="text-muted py-3">Message</th>
+                            <th class="text-muted py-3">Notification Date</th>
+                            <th class="text-muted py-3">Status</th>
+                            <th class="text-muted py-3 pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for notification in notifications %}
+                        <tr class="{% if not notification.is_read %}table-light{% endif %}">
+                            <td class="align-middle ps-4">
+                                <a href="{% url 'admin_app:traveler_detail' notification.traveler.pk %}" class="text-decoration-none text-dark">
+                                    <img src="{{ notification.traveler.profile_picture.url|default:'/static/img/default-avatar.png' }}"
+                                         class="rounded-circle me-2"
+                                         width="35" height="35"
+                                         alt="{{ notification.traveler.user.username }}">
+                                    {{ notification.traveler.user.username }}
+                                </a>
+                            </td>
+                            <td class="align-middle">
+                                {% if notification.notification_type == 'system' %}
+                                    <span class="badge bg-info-soft text-info rounded-pill">
+                                        <i class="fas fa-cog me-1"></i>System
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-success-soft text-success rounded-pill">
+                                        <i class="fas fa-plane me-1"></i>Trip Reminder
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">{{ notification.message|truncatechars:50 }}</td>
+                            <td class="align-middle">{{ notification.notification_date|date:"Y-m-d H:i" }}</td>
+                            <td class="align-middle">
+                                {% if notification.is_read %}
+                                    <span class="badge bg-secondary-soft text-secondary rounded-pill">
+                                        <i class="fas fa-check me-1"></i>Read
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning-soft text-warning rounded-pill">
+                                        <i class="fas fa-envelope me-1"></i>Unread
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="align-middle pe-4">
+                                <div class="d-flex">
+                                    <button class="btn btn-sm btn-outline-info me-2" data-bs-toggle="modal" data-bs-target="#viewModal{{ notification.id }}" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ notification.id }}" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- View Notification Modal -->
+                        <div class="modal fade" id="viewModal{{ notification.id }}" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content border-0 shadow-lg">
+                                    <div class="modal-header border-bottom-0">
+                                        <h5 class="modal-title">
+                                            <i class="fas fa-bell me-2 text-primary"></i>Notification Details
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <div class="bg-light-soft p-3 rounded">
+                                                    <h6 class="text-muted mb-2">Traveler</h6>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="{{ notification.traveler.profile_picture.url|default:'/static/img/default-avatar.png' }}"
+                                                             class="rounded-circle me-2"
+                                                             width="40" height="40"
+                                                             alt="{{ notification.traveler.user.username }}">
+                                                        <a href="{% url 'admin_app:traveler_detail' notification.traveler.pk %}" class="text-decoration-none">
+                                                            {{ notification.traveler.user.username }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="bg-light-soft p-3 rounded">
+                                                    <h6 class="text-muted mb-2">Type</h6>
+                                                    <p class="mb-0">
+                                                        {{ notification.get_notification_type_display }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="bg-light-soft p-3 rounded">
+                                                    <h6 class="text-muted mb-2">Message</h6>
+                                                    <p class="mb-0">{{ notification.message }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="bg-light-soft p-3 rounded">
+                                                    <h6 class="text-muted mb-2">Notification Date</h6>
+                                                    <p class="mb-0">{{ notification.notification_date|date:"Y-m-d H:i" }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="bg-light-soft p-3 rounded">
+                                                    <h6 class="text-muted mb-2">Status</h6>
+                                                    <p class="mb-0">
+                                                        {{ notification.is_read|yesno:"Read,Unread" }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delete Notification Modal -->
+                        <div class="modal fade" id="deleteModal{{ notification.id }}" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content border-0 shadow-lg">
+                                    <div class="modal-header border-bottom-0">
+                                        <h5 class="modal-title text-danger">
+                                            <i class="fas fa-trash-alt me-2"></i>Confirm Deletion
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <p class="mb-3">Are you sure you want to delete this notification?</p>
+                                        <div class="d-flex justify-content-center">
+                                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+                                            <form method="post" action="{% url 'admin_app:notification_delete' notification.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fas fa-bell-slash text-muted fa-4x mb-3"></i>
+                                    <p class="text-muted">No notifications found</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Soft Background Colors */
+    .bg-primary-soft { background-color: rgba(13, 110, 253, 0.1); }
+    .bg-warning-soft { background-color: rgba(255, 193, 7, 0.1); }
+    .bg-info-soft { background-color: rgba(13, 202, 240, 0.1); }
+    .bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
+    .bg-secondary-soft { background-color: rgba(108, 117, 125, 0.1); }
+    .bg-light-soft { background-color: rgba(248, 249, 250, 0.8); }
+
+    /* Hover Effects */
+    .card-stat {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-stat:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+    }
+     
+    .modal-backdrop {
+    display: none !important;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "base_admin.html" %}
+{% load static %}
+
+{% block title %}Category Details | TripCraft Admin{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'admin_app:category_list' %}">Categories</a></li>
+<li class="breadcrumb-item active">{{ category.name }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">{{ category.name }}</h3>
+                <a href="{% url 'admin_app:category_edit' category.pk %}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit Category
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="text-center mb-4">
+                        {% if category.icon %}
+                            <img src="{{ category.icon.url }}" alt="{{ category.name }}" class="img-fluid rounded" style="max-height: 200px;">
+                        {% else %}
+                            <div class="p-5 bg-light rounded">
+                                <i class="fas fa-folder fa-5x text-secondary"></i>
+                                <p class="mt-3 text-muted">No icon available</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Category Information</h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Created Date</span>
+                                <span>{{ category.created_at|date:"Y-m-d" }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Last Updated</span>
+                                <span>{{ category.updated_at|date:"Y-m-d" }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Trip Count</span>
+                                <span>{{ category.trips.count }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>POI Count</span>
+                                <span>{{ category.points_of_interest.count }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <h4>Description</h4>
+                    <div class="mb-4 p-3 bg-light rounded">
+                        <p>{{ category.description|default:"No description available." }}</p>
+                    </div>
+
+                    <h4>Related Points of Interest</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Created Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for poi in category.points_of_interest.all %}
+                                <tr>
+                                    <td>{{ poi.name }}</td>
+                                    <td>{{ poi.location }}</td>
+                                    <td>{{ poi.created_at|date:"Y-m-d" }}</td>
+                                    <td>
+                                        <a href="{% url 'admin_app:poi_detail' poi.pk %}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No points of interest in this category</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

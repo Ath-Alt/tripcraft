@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- Load static files to reference (Atheen) -->
+{% load static %}
+
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register in TripCraft</title>
+    <!-- Link CSS using Django static tag to generate correct URL (Atheen) -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body dir="ltr">
+    <div class="container">
+        <div class="form-box">
+            <h2>Register a New Account</h2>
+
+            <!-- Check if there're error messages and display them (Atheen) -->
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                <!-- Required for Django form processing (Atheen) -->
+                {% csrf_token %}
+                <input type="text" placeholder="Username" dir="ltr" name="username">
+                <input type="email" placeholder="Email"dir="ltr" name="email">
+                <input type="password" placeholder="Password" dir="ltr" name="password">
+                <input type="password" placeholder="Confirm password" dir="ltr">
+                <div class="gender" name="gender">
+                    <label>Gender:</label>
+                    <input type="radio" name="gender" id="male" value="M">
+                    <label for="male">Male</label>
+                    <input type="radio" name="gender" id="female" value="F">
+                    <label for="female">Female</label>
+                </div>
+                <p>Do you agree to the terms and conditions ?</p>
+                <input type="checkbox" id="I agree" name="agree">
+                <label for="I agree">I agree</label>
+                <button>Register</button>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>

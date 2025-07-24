@@ -1,0 +1,113 @@
+{% load static %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/settings/settings.css' %}">
+<!--<link rel="stylesheet" href="Nav.css">-->
+<button id="settings" class="utl">
+    <img
+      class="icons"
+      src="{% static 'images/icons/9-settings.png' %}"
+      height="50"
+      alt="Settings"
+    />
+    <h2>Settings</h2>
+  </button>
+
+<!-- Popup overlay -->
+<div id="settings_dim">
+    <div id="settings_window">
+        <div id="settings-options">
+            <h2>Settings</h2>
+            <div class="settings-section">
+                <h3>Account Settings</h3>
+                <div class="setting-item">
+                    <label>Change Photo</label>
+                    <input type="file" id="photoUpload" accept="image/*" hidden>
+                    <label for="photoUpload" class="upload-btn">Choose Photo</label>
+                    <div id="previewArea">
+                        <img id="previewImage" src="#" alt="Preview">
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label>User Name</label>
+                    <input type="text" id="username" placeholder="Enter new username">
+                </div>
+                <div class="setting-item">
+                    <label>Bio (Optional)</label>
+                    <textarea id="userBio" rows="3" placeholder="Tell us about yourself"></textarea>
+                </div>
+                <div class="setting-item">
+                    <label>Change Email</label>
+                    <input type="email" id="email" placeholder="Enter new email address">
+                </div>
+                <div class="setting-item">
+                    <label>Change Password</label>
+                    <input type="password" id="password" placeholder="Enter new password">
+                </div>
+                <div class="settings-actions">
+                    <button id="saveSettings" class="save-btn">Save Changes</button>
+                </div>
+                <div id="messages"></div>
+            </div>
+
+          
+
+            <div class="settings-section">
+                <h3>Notifications</h3>
+                <div class="setting-item">
+                    <label>Likes</label>
+                    <label class="switch">
+                        <input type="checkbox" id="likesNotifications" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+              
+                <div class="setting-item">
+                    <label>New Followers</label>
+                    <label class="switch">
+                        <input type="checkbox" id="followersNotifications" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Language</h3>
+                <div class="setting-item">
+                    <select id="languageSelect">
+                        <option value="en">English</option>
+           
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Email Support</h3>
+                <div class="setting-item">
+                    <button class="support-btn">Email Support</button>
+                </div>
+            </div>
+
+            <div class="settings-section danger-zone">
+                <h3>Delete Account</h3>
+                <button id="deleteAccount" class="danger-btn" onclick="confirmDeletion()">Delete Permanently</button>
+            </div>
+        </div>
+      <button id="settings_cancel" aria-label="Close settings">&times;</button> 
+    </div>
+</div>
+
+<script>
+    function confirmDeletion() {
+        console.log("hello")
+        if (confirm("Are you sure you want to delete your account? This cannot be undone!")) {
+            // Add actual deletion logic
+            fetch('/api/delete-account', { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) window.location.href = '/';
+                    else alert('Error deleting account');
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
+</script>
+<script src="{% static 'js/settings/settings.js' %}"></script>

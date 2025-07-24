@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="{% static 'css/contact.css' %}">
+</head>
+
+<body>
+    <!--Navigation bar-->
+    <nav>
+        <h2 class="logo">TripCraft</h2>
+        <div>
+            <a href="/">Home</a>
+            <a href="/contact">Contact</a>
+            <a href="/about">About us</a>
+            <a href="/login">Login </a>
+        </div>
+    </nav>
+
+    <!--Description of page-->
+    <div id="main">
+        <h1>Contact Us</h2>
+        <p>Planning your next journey? We're here to ensure smooth travels! Whether you need help with itinerary changes, custom travel plans, or group trip coordination, our team is ready to assist.</p>
+        <p>Reach out via email, phone, or the form below, and we'll respond within 24 hours—your perfect trip is just a message away!</p>
+        <button id="form"><strong>Reach out</strong></button>
+    </div>
+    <img src="{% static 'images/headset.png' %}" id="original">
+
+    <!--Page footer-->
+    <footer>
+        <p>&copy; 2025 TripCraft | All Rights Reserved</p>
+        <p>Made with ❤️ by the Code Wizards</p>
+    </footer>
+
+    <!--Dims page on popup-->
+    <div id="dim">
+
+        <!--Popup window-->
+        <div id="window">
+
+            <!--Description + email-->
+            <div id="left">
+                <h1>Need some <span>help?</span></h1>
+                <img src="{% static 'images/headset.png' %}">
+                <p>Or email us anytime at <a href="mailto:tripcraft@gmail.com">tripcraft@gmail.com</a></p>
+            </div>
+
+            <!--Form submission -->
+            <div id="right">
+
+                <!--Close popup-->
+                <button id="cancel">x</button>
+                <form>
+                    <input type="text" name="name" placeholder="Name" required maxlength="13">
+                    <input type="text" name="email" placeholder="Email" required maxlength="320">
+                    <textarea name="msg" placeholder="Message" rows="8" cols="50" maxlength="256"></textarea>
+                    <button id="submit">Submit</button>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--JS link-->
+    <script src="{% static 'js/contact.js' %}"></script>
+
+</body>
+</html>

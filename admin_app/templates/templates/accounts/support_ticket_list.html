@@ -1,0 +1,349 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+{#<div class="container-fluid px-4 py-3">#}
+{#    <div class="row align-items-center mb-4">#}
+{#        <div class="col-md-6">#}
+{#            <h2 class="mb-0">#}
+{#                <i class="fas fa-ticket-alt me-2 text-primary"></i>Support Ticket Management#}
+{#            </h2>#}
+{#        </div>#}
+{#        <div class="col-md-6 text-md-end">#}
+{#            <div class="btn-group" role="group">#}
+{#                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#filterModal">#}
+{#                    <i class="fas fa-filter me-1"></i>Filter#}
+{#                </button>#}
+{#                <a href="#" class="btn btn-outline-success">#}
+{#                    <i class="fas fa-file-excel me-1"></i>Export to Excel#}
+{#                </a>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+<div class="container-fluid py-4 px-4">
+    <!-- Animated Page Header with Gradient -->
+    <div class="card mb-4 header-card">
+        <div class="card-body d-flex justify-content-between align-items-center py-3 px-4">
+            <div class="d-flex align-items-center">
+                <div class="icon-container me-3" style="background: linear-gradient(45deg, var(--icon-travelers), #4CAF50);">
+                    <i class="fas fa-hiking fa-lg text-white"></i>
+                </div>
+                <h3 style="font-family: var(--navfont); margin: 0; font-weight: 700; color: #333;">Support Ticket Management</h3>
+            </div>
+            <div>
+                <button class="btn filter-btn me-2" data-bs-toggle="modal" data-bs-target="#filterModal">
+                    <i class="fas fa-filter me-2"></i> Filter
+                </button>
+                <a href="#" class="btn export-btn">
+                    <i class="fas fa-file-excel me-2"></i> Export to Excel
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Statistics Dashboard -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white hover-lift">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-plus-circle fa-2x"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-title mb-1">New Tickets</h6>
+                        <span class="h4 mb-0">{{ new_tickets_count|default:0 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Other statistic cards in the same style -->
+        <div class="col-md-3">
+            <div class="card bg-warning text-white hover-lift">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-spinner fa-2x"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-title mb-1">In Progress</h6>
+                        <span class="h4 mb-0">{{ in_progress_tickets_count|default:0 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white hover-lift">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-title mb-1">Resolved</h6>
+                        <span class="h4 mb-0">{{ resolved_tickets_count|default:0 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white hover-lift">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-title mb-1">Urgent</h6>
+                        <span class="h4 mb-0">{{ urgent_tickets_count|default:0 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Improved Tickets Table -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-muted">Ticket ID</th>
+                            <th class="text-muted">Traveler</th>
+                            <th class="text-muted">Subject</th>
+                            <th class="text-muted">Status</th>
+                            <th class="text-muted">Priority</th>
+                            <th class="text-muted">Assigned To</th>
+                            <th class="text-muted">Created Date</th>
+                            <th class="text-muted">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in tickets %}
+                        <tr class="{% if ticket.priority == 'urgent' %}table-danger{% endif %}">
+                            <td class="align-middle">#{{ ticket.id }}</td>
+                            <td class="align-middle">
+                                <a href="{% url 'admin_app:traveler_detail' ticket.traveler.pk %}" class="text-decoration-none">
+                                    {{ ticket.traveler.user.username }}
+                                </a>
+                            </td>
+                            <td class="align-middle">{{ ticket.subject|truncatechars:30 }}</td>
+                            <td class="align-middle">
+                                <span class="badge bg-{{ ticket.status|yesno:'success,warning,danger' }} rounded-pill">
+                                    {{ ticket.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="align-middle">
+                                <span class="badge bg-{{ ticket.priority }} rounded-pill">
+                                    {{ ticket.get_priority_display }}
+                                </span>
+                            </td>
+                            <td class="align-middle">
+                                {% if ticket.assigned_to %}
+                                    {{ ticket.assigned_to.username }}
+                                {% else %}
+                                    <span class="text-muted">Unassigned</span>
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">{{ ticket.created_at|date:"Y-m-d H:i" }}</td>
+                            <td class="align-middle">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{% url 'admin_app:support_ticket_detail' ticket.pk %}" class="btn btn-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Reassign</a></li>
+                                        <li><a class="dropdown-item" href="#">Escalate</a></li>
+                                        <li><a class="dropdown-item text-danger" href="#">Close</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>No support tickets found
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Improved Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title">
+                    <i class="fas fa-filter me-2 text-primary"></i>Filter Tickets
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="get">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Status</label>
+                            <select name="status" class="form-select">
+                                <option value="">All</option>
+                                <option value="new">New</option>
+                                <option value="in_progress">In Progress</option>
+                                <option value="resolved">Resolved</option>
+                                <option value="closed">Closed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Priority</label>
+                            <select name="priority" class="form-select">
+                                <option value="">All</option>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Assigned To</label>
+                            <select name="assigned_to" class="form-select">
+                                <option value="">All</option>
+                                <option value="unassigned">Unassigned</option>
+                                {% for user in staff_users %}
+                                <option value="{{ user.id }}">{{ user.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Created Date</label>
+                            <div class="input-group">
+                                <input type="date" name="start_date" class="form-control" placeholder="From Date">
+                                <input type="date" name="end_date" class="form-control" placeholder="To Date">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Search</label>
+                            <input type="text" name="search" class="form-control" placeholder="Search by ticket ID, traveler, or subject">
+                        </div>
+                    </div>
+                    <div class="mt-3 text-end">
+                        <button type="reset" class="btn btn-secondary me-2">Clear</button>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Additional Effects */
+    .hover-lift {
+        transition: transform 0.3s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+    }
+    /* Enhanced Card Styles */
+    .header-card {
+        background: linear-gradient(135deg, var(--main-color), var(--2nd-color));
+        backdrop-filter: blur(10px);
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .header-card:hover {
+        box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+
+    .main-card {
+        background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
+        backdrop-filter: blur(10px);
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        overflow: hidden;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    /* Button Styles */
+    .filter-btn {
+        background: linear-gradient(45deg, rgba(100, 225, 227, 0.8), rgba(73, 170, 244, 0.8));
+        color: white;
+        box-shadow: 0 4px 15px rgba(73, 170, 244, 0.2);
+        border-radius: 2rem;
+        padding: 0.6rem 1.5rem;
+        border: none;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .filter-btn:hover {
+        box-shadow: 0 8px 20px rgba(73, 170, 244, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .export-btn {
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+        color: white;
+        box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2);
+        border-radius: 2rem;
+        padding: 0.6rem 1.5rem;
+        border: none;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .export-btn:hover {
+        box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        margin: 0 3px;
+    }
+
+    .view-btn {
+        background-color: rgba(52, 152, 219, 0.1);
+        color: #3498db;
+    }
+
+    .view-btn:hover {
+        background-color: #3498db;
+        color: white;
+        box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+    }
+
+    .message-btn {
+        background-color: rgba(155, 89, 182, 0.1);
+        color: #9b59b6;
+    }
+
+    .message-btn:hover {
+        background-color: #9b59b6;
+        color: white;
+        box-shadow: 0 4px 10px rgba(155, 89, 182, 0.3);
+    }
+     
+    .modal-backdrop {
+    display: none !important;
+}
+</style>
+{% endblock %}

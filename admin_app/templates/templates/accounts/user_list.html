@@ -1,0 +1,164 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Manage Users</h2>
+        <div>
+            <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#filterModal">
+                <i class="fas fa-filter"></i> Filter
+            </button>
+        </div>
+    </div>
+
+    <!-- Quick Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Active Users</h6>
+                    <h2 class="mb-0">{{ active_users_count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Staff Members</h6>
+                    <h2 class="mb-0">{{ staff_users_count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h6 class="card-title">New Users (30 days)</h6>
+                    <h2 class="mb-0">{{ new_users_count }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Account Type</th>
+                            <th>Status</th>
+                            <th>Registration Date</th>
+                            <th>Last Login</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {% if user.traveler.profile_photo %}
+                                        <img src="{{ user.traveler.profile_photo.url }}" class="rounded-circle me-2" width="40">
+                                    {% else %}
+                                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                            {{ user.username|make_list|first|upper }}
+                                        </div>
+                                    {% endif %}
+                                    {{ user.username }}
+                                </div>
+                            </td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                {% if user.is_staff %}
+                                    <span class="badge bg-success">Staff</span>
+                                {% else %}
+                                    <span class="badge bg-primary">User</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Disabled</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ user.date_joined|date:"Y-m-d" }}</td>
+                            <td>{{ user.last_login|date:"Y-m-d H:i"|default:"Never logged in" }}</td>
+                            <td>
+                                <a href="{% url 'admin_app:user_detail' user.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No users found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Filter Users</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="get">
+                    <div class="mb-3">
+                        <label class="form-label">Account Type</label>
+                        <select name="account_type" class="form-select">
+                            <option value="">All</option>
+                            <option value="staff">Staff</option>
+                            <option value="user">Regular User</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select">
+                            <option value="">All</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Disabled</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Registration Date</label>
+                        <input type="date" name="date_joined" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Apply</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stat-card {
+        background: white;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .timeline {
+        position: relative;
+        padding: 20px 0;
+    }
+        .modal-backdrop {
+    display: none !important;
+}
+</style>
+{% endblock %}

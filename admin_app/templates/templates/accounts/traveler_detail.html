@@ -1,0 +1,197 @@
+{% extends "templates/accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="row">
+        <!-- Traveler Information Card -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    {% if traveler.profile_photo %}
+                        <img src="{{ traveler.profile_photo.url }}" class="rounded-circle mb-3" width="120">
+                    {% else %}
+                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 120px; height: 120px; font-size: 3rem;">
+                            {{ traveler.user.username|make_list|first|upper }}
+                        </div>
+                    {% endif %}
+                    <h4>{{ traveler.user.username }}</h4>
+                    <p class="text-muted">{{ traveler.user.email }}</p>
+                    
+                    <div class="d-grid gap-2">
+                        {% if traveler.verification %}
+                            <button class="btn btn-{{ traveler.verification.status|yesno:'success,warning,danger' }}">
+                                {{ traveler.verification.get_status_display }}
+                            </button>
+                        {% else %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <button type="submit" name="verify_traveler" class="btn btn-primary">
+                                    Verify Traveler
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Registration Date</span>
+                        <span>{{ traveler.user.date_joined|date:"Y-m-d" }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Last Activity</span>
+                        <span>{{ traveler.user.last_login|date:"Y-m-d H:i"|default:"Never logged in" }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Trip Count</span>
+                        <span>{{ traveler.trips.count }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Support Tickets</span>
+                        <span>{{ traveler.support_tickets.count }}</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Administrative Notes Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Administrative Notes</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="mb-3">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <textarea name="note" class="form-control" rows="3" placeholder="Add a new note"></textarea>
+                        </div>
+                        <button type="submit" name="add_note" class="btn btn-primary">Add Note</button>
+                    </form>
+                    
+                    <div class="notes-list">
+                        {% for note in notes %}
+                        <div class="note-item mb-3">
+                            <div class="d-flex justify-content-between">
+                                <strong>{{ note.author.username }}</strong>
+                                <small class="text-muted">{{ note.created_at|date:"Y-m-d H:i" }}</small>
+                            </div>
+                            <p class="mb-0">{{ note.note }}</p>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted">No notes available</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Section -->
+        <div class="col-md-8">
+            <!-- Support Tickets -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Support Tickets</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <th>Subject</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Created Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ticket in support_tickets %}
+                                <tr>
+                                    <td>#{{ ticket.id }}</td>
+                                    <td>{{ ticket.subject }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ ticket.status|yesno:'success,warning,danger' }}">
+                                            {{ ticket.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ ticket.priority }}">
+                                            {{ ticket.get_priority_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ ticket.created_at|date:"Y-m-d H:i" }}</td>
+                                    <td>
+                                        <a href="{% url 'admin_app:support_ticket_detail' ticket.pk %}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No support tickets found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trips -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Trips</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Trip Name</th>
+                                    <th>Destination</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for trip in traveler.trips.all %}
+                                <tr>
+                                    <td>{{ trip.name }}</td>
+                                    <td>{{ trip.location }}</td>
+                                    <td>{{ trip.start_date|date:"Y-m-d" }}</td>
+                                    <td>
+                                        {% if trip.end_date < today %}
+                                            <span class="badge bg-secondary">Completed</span>
+                                        {% else %}
+                                            <span class="badge bg-primary">Upcoming</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No trips found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .note-item {
+        padding: 10px;
+        border-left: 3px solid #007bff;
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}

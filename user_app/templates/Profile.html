@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{% static 'css/Nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile/profile.css' %}">
+</head>
+<body>
+    <main>
+        <section class="glass">
+            <!-- [Layan] Include the navbar -->
+            {% include "includes/nav.html" %}
+            <div class="dashbord">
+                <div class="dash1">
+                    <div class="db1">
+                        <div class="profile">
+                            <div class="profile-header" id="profile-header">
+                                <!-- [Layan] Notification Bell with dynamic notifications -->
+                                <div class="notification-bell">
+                                    <button class="bell-btn" onclick="toggleNotifications()">
+                                        <span class="bell-icon">🔔</span>
+                                        <span class="notification-badge">{{ notifications.count }}</span>
+                                    </button>
+                                    <div class="notification-dropdown" id="notification-dropdown">
+                                        {% for notification in notifications %}
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <p>{{ notification.message }}</p>
+                                                {% if not notification.is_read %}
+                                                    <a href="{% url 'user_app:mark_notification_as_read' notification.id %}">
+                                                        <button style="font-size: 12px; padding: 2px 5px;">Mark as Read</button>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        {% empty %}
+                                            <p>No new notifications</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <!-- [Layan] Dynamic profile picture, username, and info -->
+                                {% if user_profile.avatar %}
+                                    <img src="{{ user_profile.avatar.url }}" alt="Profile Picture" class="profile-pic">
+                                {% else %}
+                                    <img src="{% static 'images/default-profile.png' %}" alt="Profile Picture" class="profile-pic">
+                                {% endif %}
+                                <div class="profile-info">
+                                    <h2>{{ username }}</h2>
+                                    <p>🌍 {{ user_profile.bio }} | 🗺️ {{ trips.count }} trips</p>
+                                    <span class="following-count">Following: {{ following_count }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- [Layan] Dynamic trip cards -->
+                        <div class="cards-container" id="trip-cards">
+                            {% for trip in trips %}
+                                <a href="{% url 'user_app:trip_detail_view' trip.id %}" class="trip-card-link">
+                                    <div class="trip-card">
+                                        {% if trip.img %}
+                                            <img class="trip-img" src="{{ trip.img.url }}" alt="Trip Image">
+                                        {% else %}
+                                            <img class="trip-img" src="{% static 'images/default-img.png' %}" alt="Trip Image">
+                                        {% endif %}
+                                        <div class="trip-content">
+                                            <div class="trip-name">{{ trip.name }}</div>
+                                            <div class="trip-details">
+                                                Destination: {{ trip.destination }}<br>
+                                                Duration: {{ trip.duration }} Days<br>
+                                                Date: {{ trip.date|date:"M d, Y" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% empty %}
+                                <p>No trips yet. Start planning your adventure!</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <!-- [Layan] Following section -->
+                <div class="dash2">
+                    <div class="db3">
+                        <div class="following">
+                            <h1 class="following-title">Your Following</h1>
+                            <!-- [Layan] Form to follow -->
+                            <form method="POST" action="{% url 'user_app:add_follow' %}" style="margin-bottom: 20px;">
+                                {% csrf_token %}
+                                {{ follow_form.as_p }}
+                                <button type="submit" class="action-btn">Follow</button>
+                            </form>
+                            <!-- [Layan] Search bar and messages -->
+                            <input type="text" class="search-bar" id="searchBar" placeholder="Search following..." oninput="filterFollowing()">
+                            {% if messages %}
+                                <div class="messages">
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}">
+                                            {{ message }}
+                                            <button class="close-btn" onclick="this.parentElement.style.display='none'">×</button>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <!-- [Layan] Following list -->
+                            <div class="friends-cards-container" id="friendsContainer">
+                                {% for followage in following %}
+                                    <div class="follow-card" data-username="{{ followage.follow.username }}">
+                                        {% if followage.follow.userprofile.avatar %}
+                                            <img class="follow-img" src="{{ followage.follow.userprofile.avatar.url }}" alt="Follow Avatar">
+                                        {% else %}
+                                            <img class="follow-img" src="{% static 'images/default-img.png' %}" alt="Follow Avatar">
+                                        {% endif %}
+                                        <div class="follow-content">
+                                            <div class="follow-name">{{ followage.follow.username }}</div>
+                                        </div>
+                                        <div class="card-actions">
+                                            <a href="{% url 'user_app:delete_follow' followage.follow.id %}">
+                                                <button class="action-btn delete-btn">✖</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% empty %}
+                                    <p>Not following anyone yet. Start following!</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="{% static 'js/profile/profile.js' %}"></script>
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+</body>
+</html>

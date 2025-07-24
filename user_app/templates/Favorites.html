@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites</title>
+    <link rel="stylesheet" href="{% static 'css/Nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fav/favorites.css' %}">
+</head>
+<body>
+    <main>
+        <section class="glass">
+            {% include "includes/nav.html" %}
+            <div class="dashboard">
+                <div class="dash1">
+                    <div class="db2">
+                        <div class="results-container">
+                            <h2>Favorite Destinations</h2>
+                            <div class="fav-scroll" id="fav-scroll">
+                                <div class="container">
+                                    <div class="initial-cards" id="initial-cards">
+                                        {% for trip in trips %}
+                                        <a href="{% url 'user_app:explore_card' trip.id %}" class="trip-card-link">
+                                            <div class="trip-card">
+                                                <div class="user-info">
+                                                    <img class="user-img" src="
+                                                    {% if trip.user.userprofile.avatar %}
+                                                        {{ trip.user.userprofile.avatar.url }}
+                                                    {% else %}
+                                                        {% static 'images/default-profile.png' %}
+                                                    {% endif %}
+                                                    " alt="User Avatar">
+                                                    <span class="user-name">{{ trip.user.username }}</span>
+                                                </div>
+                                                <div class="trip-content">
+                                                    <img class="trip-img" src="
+                                                    {% if trip.img %}
+                                                        {{ trip.img.url }}
+                                                    {% else %}
+                                                        {% static 'images/default-trip.png' %}
+                                                    {% endif %}
+                                                    " alt="Trip Image">
+                                                    <div class="trip-info">
+                                                        <div class="trip-name">{{ trip.name }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="trip-details">
+                                                    Destination: {{ trip.destination }}<br>
+                                                    Duration: {{ trip.duration }} days<br>
+                                                    Date: {{ trip.date|date:"M d, Y"|default:"Not specified" }}
+                                                </div>
+                                                <div class="card-actions">
+                                                    <button class="action-btn favorite-btn {% if request.user in trip.favoritetrip_set.all %}active{% endif %}" 
+                                                            hx-post="{% url 'user_app:toggle_favorite' trip.id %}" 
+                                                            hx-target="#fav-scroll" 
+                                                            hx-swap="innerHTML">❤️</button>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        {% empty %}
+                                        <p>No favorite destinations.</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="{% static 'js/fav/script.js' %}"></script>
+</body>
+</html>

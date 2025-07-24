@@ -1,0 +1,53 @@
+{% load static %}
+
+<section class="trip-folder" data-id="{{ trip.id }}" style="background-color: {{ trip.color }};">
+    <a class="trip-clikc-ev" href="{% url 'user_app:trip_detail_view' trip.id %}" class="trip-card-link">
+        <div class="trip-img">
+            {% if trip.img %}
+            <img class="trip-f-img" src="{{ trip.img.url }}" alt="{{ trip.name }}">
+            {% else %}
+            <img class="trip-f-img" src="{% static 'images/default-img.png' %}" alt="No image">
+            {% endif %}
+            
+            <div class="shadows"></div>
+        </div>
+        <div class="trip-name"> <h2 class="trip-nameText trip-textColor" id="trip-textColor" >{{ trip.name }}</h2> </div>
+        <div class="tip-infos trip-textColor">
+            <div class="trip-infos">
+            <p class="trip-info trip-textColor">Destination: <span class="info-output trip-textColor">{{ trip.destination }}</span> </p>
+            <p class="trip-info trip-textColor">Duration: <span class="info-output trip-textColor">{{ trip.duration }} Days</span></p>
+            <p class="trip-info trip-textColor">Date: <span class="info-output trip-textColor">{{ trip.date }}</span> </p>
+            </div>
+        </div>
+        <div class="trip-Creators">
+            
+            <div class="creator-avas">
+                {% if request.user.userprofile.avatar %}
+                    <img class="creator-ava" src="{{ request.user.userprofile.avatar.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="creator-ava" src="{% static 'images/default-profile.png' %}" alt="Default Avatar">
+                {% endif %}
+            </div>
+            <div><p class="creator-name trip-textColor">Creator: <span class="creater-username trip-textColor">{{ request.user.username }}</span></p></div>
+        </div>
+    </a>
+    <div class="trip-edit-delete">
+        <button class="trip-edit"
+            class="trip-edit"
+            hx-get="{% url 'user_app:edit_trip' trip.id %}" 
+            hx-target="#modalT" 
+            hx-swap="innerHTML">
+            <img id="trip-edit" src="{% static 'images/icons/Edit-btn.png' %}" alt=""></button>
+
+            <button class="trip-delete" type="submit"
+                hx-get="{% url 'user_app:confirm_del_trip' trip.id %}" 
+                hx-target="#delet_trip_modal" 
+                hx-trigger="click" 
+                hx-swap="innerHTML"
+                > 
+                <img id="trip-delete" src="{% static 'images/icons/garbage.png' %}" alt="">
+            </button>
+    </div>
+</section>
+
+

@@ -1,0 +1,253 @@
+{% autoescape off %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripCraft Password Reset</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Header */
+        .header {
+            background-color: #4e73df;
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        .header img {
+            max-height: 40px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Content */
+        .content {
+            padding: 30px;
+            background-color: #ffffff;
+        }
+
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #4a5568;
+        }
+
+        /* Verification Code Box */
+        .verification-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .verification-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #718096;
+            margin-bottom: 10px;
+        }
+
+        .verification-code {
+            display: inline-block;
+            padding: 15px 25px;
+            background-color: #edf2f7;
+            border-radius: 8px;
+            font-size: 32px;
+            letter-spacing: 5px;
+            color: #4e73df;
+            font-weight: bold;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Expiration Notice */
+        .expiration {
+            font-size: 14px;
+            color: #e53e3e;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Security Note */
+        .security-note {
+            background-color: #f7fafc;
+            border-left: 4px solid #4e73df;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        /* Call to Action Button */
+        .cta-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #4e73df;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .support {
+            font-size: 14px;
+            text-align: center;
+            color: #718096;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .footer p {
+            font-size: 12px;
+            color: #718096;
+            margin: 5px 0;
+        }
+
+        .social-links {
+            margin: 15px 0;
+        }
+
+        .social-icon {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #4e73df;
+            border-radius: 50%;
+            margin: 0 5px;
+            color: white;
+            line-height: 30px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .address {
+            font-size: 11px;
+            color: #a0aec0;
+            margin-top: 15px;
+        }
+
+        /* Helper Classes */
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 100%;
+                border-radius: 0;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .verification-code {
+                font-size: 28px;
+                letter-spacing: 3px;
+                padding: 12px 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+
+        @media screen and (max-width: 400px) {
+            .verification-code {
+                font-size: 24px;
+                letter-spacing: 2px;
+                padding: 10px 15px;
+            }
+
+            .cta-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <!-- Logo can be an image or text -->
+            <svg width="150" height="40" viewBox="0 0 150 40">
+                <text x="10" y="25" fill="white" font-size="18" font-weight="bold">TripCraft</text>
+                <path d="M140,20 C140,25 135,30 130,30" stroke="white" fill="none" stroke-width="2"/>
+                <path d="M120,10 L125,20 L130,10" stroke="white" fill="none" stroke-width="2"/>
+            </svg>
+            <h1>Password Reset</h1>
+        </div>
+
+        <div class="content">
+            <p class="greeting">Hello {{ user.username }},</p>
+
+            <p>We received a request to reset your password for your TripCraft account. Security of your account is important to us, so we're sending you this verification code to confirm your identity.</p>
+
+            <div class="verification-container">
+                <div class="verification-title">Your Verification Code</div>
+                <div class="verification-code">{{ verification_code }}</div>
+            </div>
+
+            <p class="expiration">This code will expire in 30 minutes for security reasons.</p>
+
+
+
+        </div>
+    </div>
+</body>
+</html>
+{% endautoescape %}

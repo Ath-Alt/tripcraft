@@ -1,0 +1,102 @@
+{% load static %}
+<nav class="navbar">
+  <div class="user">
+    <img
+      class="ava" 
+      src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 64 64'><circle cx='32' cy='32' r='31' fill='none' stroke='%23555' stroke-width='2'/><circle cx='32' cy='24' r='10' fill='none' stroke='%23555' stroke-width='2'/><path d='M16,50 C16,42 48,42 48,50' fill='none' stroke='%23555' stroke-width='2'/></svg>"
+      width="150"
+      alt=""
+    />
+    <h3>{{ request.user.username }}</h3>
+  </div>
+    <div class="links">
+      <a href="{% url 'admin_app:analytics' %}" class="link {% if 'analytics' in request.path %}active{% endif %}" >
+        <div class="icon-container">
+          <i class="fa-solid fa-chart-simple" style="color: #ff69b4;"></i>
+        </div>
+          <h2>Analytics</h2>
+      </a>
+      <a href="{% url 'admin_app:monitor' %}" class="link {% if 'monitor' in request.path %}active{% endif %}" >
+        <div class="icon-container">
+          <i class="fa-solid fa-eye" style="color: #2196f3;"></i>
+        </div>
+          <h2>Monitor Users</h2>
+      </a>
+      <a href="{% url 'admin_app:category_list' %}" class="link {% if 'categories' in request.path %}active{% endif %}">
+        <div class="icon-container">
+            <i class="fas fa-folder fa-lg" style="color: var(--icon-categories);"></i>
+        </div>
+        <h2>Categories</h2>
+        {% if categories_count > 0 %}
+        <span class="badge bg-primary rounded-pill">{{ categories_count }}</span>
+        {% endif %}
+    </a>
+
+    <a href="{% url 'admin_app:poi_list' %}" class="link {% if 'poi' in request.path %}active{% endif %}">
+        <div class="icon-container">
+            <i class="fas fa-map-marker-alt fa-lg" style="color: var(--icon-poi);"></i>
+        </div>
+        <h2>Points of Interest</h2>
+        {% if poi_count > 0 %}
+        <span class="badge bg-info rounded-pill">{{ poi_count }}</span>
+        {% endif %}
+    </a>
+
+    <a href="{% url 'admin_app:traveler_list' %}" class="link {% if 'travelers' in request.path %}active{% endif %}">
+        <div class="icon-container">
+            <i class="fas fa-hiking fa-lg" style="color: var(--icon-travelers);"></i>
+        </div>
+        <h2>Travelers</h2>
+        {% if travelers_count > 0 %}
+        <span class="badge bg-success rounded-pill">{{ travelers_count }}</span>
+        {% endif %}
+    </a>
+
+    <a href="{% url 'admin_app:support_ticket_list' %}" class="link {% if 'support' in request.path %}active{% endif %}">
+        <div class="icon-container">
+            <i class="fas fa-headset fa-lg" style="color: var(--icon-support);"></i>
+        </div>
+        <h2>Support</h2>
+        {% if new_tickets_count > 0 %}
+        <span class="badge bg-danger rounded-pill">{{ new_tickets_count }}</span>
+        {% endif %}
+    </a>
+
+    <div class="section-title">Settings</div>
+
+    <a href="{% url 'admin_app:user_list' %}" class="link {% if 'users' in request.path %}active{% endif %}">
+        <div class="icon-container">
+            <i class="fas fa-users fa-lg" style="color: var(--icon-users);"></i>
+        </div>
+        <h2>Users / Permissions</h2>
+        {% if new_users_count > 0 %}
+        <span class="badge bg-success rounded-pill">{{ new_users_count }}</span>
+        {% endif %}
+    </a>
+
+    <a href="{% url 'admin_app:notification_list' %}" class="link {% if 'notifications' in request.path and not 'my-notifications' in request.path %}active{% endif %}">
+        <div class="icon-container">
+            <i class="fas fa-bell fa-lg" style="color: var(--icon-notifications);"></i>
+        </div>
+        <h2>Notifications</h2>
+        {% if unread_count > 0 %}
+        <span class="badge bg-danger rounded-pill">{{ unread_count }}</span>
+        {% endif %}
+    </a>
+
+    <a href="{% url 'admin_app:user_notifications' %}" class="link {% if 'my-notifications' in request.path %}active{% endif %}">
+        <div class="icon-container">
+            <i class="far fa-bell fa-lg" style="color: var(--icon-my-notifications);"></i>
+        </div>
+        <h2>My Notifications</h2>
+        {% if unread_notifications_count > 0 %}
+        <span class="badge bg-primary rounded-pill">{{ unread_notifications_count }}</span>
+        {% endif %}
+    </a>
+    <div class="utls">
+      <div class="section-title">Account</div>
+      {% include "logout.html" %}
+  </div>
+    </div>
+
+  </nav>

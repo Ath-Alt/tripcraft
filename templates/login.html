@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!-- Load static files to reference (Atheen) -->
+{% load static %}
+
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to TripCraft</title>
+    <!-- Link CSS using Django static tag to generate correct URL (Atheen) -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-box">
+            <h2>Login Page</h2>
+
+            <!-- Check if there're error messages and display them (Atheen) -->
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                <!-- Required for Django form processing (Atheen) -->
+                {% csrf_token %}
+                <input type="text" placeholder="Username or Email" dir="ltr" name="identifier">
+                <input type="password" placeholder="Password" dir="ltr" name="password">
+                <div class="buttons">
+                    <button>Login</button>
+                </div>
+            </form>
+        </div>
+
+        <a href="{% url 'password_reset' %}">forget password</a>
+        <div class="register"> I don't have an account
+            <a href="/register">Register</a>
+        </div>
+
+    </div>
+</body>
+</html>

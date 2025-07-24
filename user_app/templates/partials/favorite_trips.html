@@ -1,0 +1,25 @@
+<div class="trip-card">
+    <div class="trip-content">
+        <img class="user-img" src="
+        {% if trip.user.userprofile.avatar %}
+            {{ trip.user.userprofile.avatar.url }}
+        {% else %}
+            {% static 'images/default-profile.png' %}
+        {% endif %}
+        " alt="User Avatar">
+        <img class="trip-img" src="
+        {% if trip.img %}
+            {{ trip.img.url }}
+        {% else %}
+            {% static 'images/default-trip.png' %}
+        {% endif %}
+        " alt="Trip Image">
+        <div class="trip-info">
+            <a href="{% url 'user_app:card' trip.id %}" class="trip-name">{{ trip.name }}</a>
+            <button class="action-btn favorite-btn active" 
+                    hx-post="{% url 'user_app:toggle_favorite' trip.id %}" 
+                    hx-target="#fav-scroll" 
+                    hx-swap="innerHTML">★</button>
+        </div>
+    </div>
+</div>

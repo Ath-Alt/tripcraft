@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore</title>
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/explore/explore-card.css' %}">
+</head>
+<body>
+    <main>
+        <section class="glass">
+        
+            <nav class="navbar">
+                <div class="user">
+                    {% if request.user.userprofile.avatar %}
+                        <img class="ava" src="{{ request.user.userprofile.avatar.url }}" width="150" alt="">
+                    {% else %}
+                        <img class="ava" src="{% static 'default_avatar.jpg' %}" width="150" alt="">
+                    {% endif %}
+                    <h3>{{ request.user.username }}</h3>
+                </div>
+                <div class="links">
+                    <a href="{% url 'user_app:explore' %}"><div class="link">
+                        <img class="icons" src="{% static 'images/icons/2-Explore.png' %}" width="50" alt="Explore">
+                        <h2>Back</h2>
+                    </div></a>
+                </div>
+            </nav>
+            <div class="dashbord">
+                <div class="dash1">
+                    <div class="db1">
+                        <div class="container">
+                            <div class="trip-card">
+                                <div class="user-info">
+                                    {% if trip.user.userprofile.avatar %}
+                                        <img class="user-img" src="{{ trip.user.userprofile.avatar.url }}" alt="User Profile Picture">
+                                    {% else %}
+                                        <img class="user-img" src="{% static 'images/default-profile.png' %}" alt="Default Avatar">
+                                    {% endif %}
+                                    <span class="user-name">{{ trip.user.username }}</span>
+                                </div>
+                                <div class="trip-details">
+                                    <div class="detail-row">
+                                        <span class="detail-label">Destination:</span>
+                                        <span class="detail-value">{{ trip.destination }}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Duration:</span>
+                                        <span class="detail-value">{{ trip.duration }} Days</span>
+                                    </div>
+                                </div>
+                                <!-- <div class="engagement-metrics">
+                                    <span id="like-count">
+                                        <img src="{% static 'images/icons/Fav-Travel.png' %}" class="like-icon" alt="like">
+                                        {{ trip.likes_count }} Likes
+                                    </span>
+                                  
+                                </div> -->
+                                <div class="engagement-metrics">
+                                    <span id="like-count">
+                                        <img src="{% static 'images/icons/Fav-Travel.png' %}" class="like-icon" alt="like">
+                                        {% with likes_count=trip.favoritetrip_set.count %}
+                                            {{ likes_count }} Like{{ likes_count|pluralize }}
+                                        {% endwith %}
+                                    </span>
+                                </div>
+
+                                <div class="container">
+                                    <div class="schedule-grid">
+                                        {% for day in grouped_plans %}
+                                            <div class="schedule">
+                                                <h1>Day {{ day.day_number }}</h1>
+                                                {% for plan in day.plans %}
+                                                    <p>{{ plan.start_time|time:"H:i" }} - {{ plan.end_time|time:"H:i" }}: {{ plan.name }}</p>
+                                                    {% if plan.location %}
+                                                        <p>Location: {{ plan.location }}</p>
+                                                    {% endif %}
+                                                    {% if plan.description %}
+                                                        <p>{{ plan.description }}</p>
+                                                    {% endif %}
+                                                {% empty %}
+                                                    <p>No activities for this day.</p>
+                                                {% endfor %}
+                                            </div>
+                                        {% empty %}
+                                            <p>No schedule available.</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+    <script src="{% static 'js/explore.js' %}"></script>
+</body>
+</html>
