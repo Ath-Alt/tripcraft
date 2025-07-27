@@ -14,7 +14,7 @@ pipeline {
                 git url: "https://github.com/Ath-Alt/tripcraft.git", branch: "master"
             }
         }
-        staye("Deploy") {
+        stage("Deploy") {
             steps {
                 echo "Deploying to OpenShift"
                 sh "oc get po"
