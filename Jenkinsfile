@@ -17,9 +17,8 @@ pipeline {
         
         stage("Build") {
             steps {
-                sh "oc get po"
                 echo "Building image"
-                sh "docker build -t athalt/tripcraft ."
+                sh "docker build -t athalt/tripcraft:latest ."
             }
         }
         
@@ -28,7 +27,7 @@ pipeline {
                 echo "Pushing to DockerHub"
                 withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser")]) {
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                    sh "docker push ${env.dockerHubUser}/tripcraft"
+                    sh "docker push ${env.dockerHubUser}/tripcraft:latest"
                 }
             }
         }
