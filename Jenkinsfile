@@ -10,6 +10,7 @@ pipeline {
     stages {
         stage("Clone") {
             steps {
+                sh "oc get po"
                 echo "Cloning code"
                 git url: "https://github.com/Ath-Alt/tripcraft.git", branch: "master"
             }
@@ -28,7 +29,6 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser")]) {
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
                     sh "docker push ${env.dockerHubUser}/tripcraft"
-                    sh "oc get po"
                 }
             }
         }
