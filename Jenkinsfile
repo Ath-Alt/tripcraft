@@ -10,7 +10,6 @@ pipeline {
     stages {
         stage("Clone") {
             steps {
-                sh "oc get po"
                 echo "Cloning code"
                 git url: "https://github.com/Ath-Alt/tripcraft.git", branch: "master"
             }
@@ -18,6 +17,7 @@ pipeline {
         
         stage("Build") {
             steps {
+                sh "oc get po"
                 echo "Building image"
                 sh "docker build -t athalt/tripcraft ."
             }
