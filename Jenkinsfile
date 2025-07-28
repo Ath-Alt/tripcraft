@@ -33,7 +33,7 @@ pipeline {
         stage("Deploy") {
             steps {
                 echo "Deploying to OpenShift"
-                sh "oc restart rollout deployment/django"
+                sh "oc rollout restart deployment/django"
             }
         }
     }
