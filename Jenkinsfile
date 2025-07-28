@@ -17,7 +17,7 @@ pipeline {
         stage("Build") {
             steps {
                 echo "Building image"
-                sh "docker build -t athalt/tripcraft:latest ."
+                sh "docker build --no-cache -t athalt/tripcraft:openshift ."
             }
         }
         
@@ -26,14 +26,14 @@ pipeline {
                 echo "Pushing to DockerHub"
                 withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser")]) {
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                    sh "docker push ${env.dockerHubUser}/tripcraft:latest"
+                    sh "docker push ${env.dockerHubUser}/tripcraft:openshift"
                 }
             }
         }
         stage("Deploy") {
             steps {
                 echo "Deploying to OpenShift"
-                sh "oc import-image django:latest --confirm"
+                sh "oc import-image django:openshift --confirm"
             }
         }
     }
