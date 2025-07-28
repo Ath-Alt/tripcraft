@@ -18,8 +18,10 @@ pipeline {
         stage("Test") {
             steps {
                 echo "Testing app"
-                sh "POD=\$(oc get po -l app=django -o jsonpath='{.items[0].metadata.name}')"
-                sh "oc exec \$POD -- python manage.py test"
+                sh '''
+                    POD=$(oc get po -l app=django -o jsonpath="{.items[0].metadata.name}")
+                    oc exec $POD -- python manage.py test
+                '''
             }
         }
 
