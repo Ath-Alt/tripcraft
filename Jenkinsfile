@@ -33,7 +33,7 @@ pipeline {
         stage("Deploy") {
             steps {
                 echo "Deploying to OpenShift"
-                sh "oc rollout restart deployment/tripcraft -n ath-alt-dev"
+                sh "oc import-image django:latest --confirm"
             }
         }
     }
