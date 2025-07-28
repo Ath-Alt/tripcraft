@@ -10,8 +10,16 @@ pipeline {
     stages {
         stage("Clone") {
             steps {
-                echo "Cloning code"
+                echo "Cloning app"
                 git url: "https://github.com/Ath-Alt/tripcraft.git", branch: "master"
+            }
+        }
+
+        stage("Test") {
+            steps {
+                echo "Testing app"
+                sh "POD=$(oc get po -l app=django -o jsonpath='{.items[0].metadata.name}')"
+                sh "oc exec $POD -- python manage.py test"
             }
         }
 
