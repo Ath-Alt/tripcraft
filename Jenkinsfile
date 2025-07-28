@@ -14,6 +14,7 @@ pipeline {
                 git url: "https://github.com/Ath-Alt/tripcraft.git", branch: "master"
             }
         }
+
         stage("Build") {
             steps {
                 echo "Building image"
@@ -30,10 +31,10 @@ pipeline {
                 }
             }
         }
+
         stage("Deploy") {
             steps {
                 echo "Deploying to OpenShift"
-                sh "oc import-image django:openshift --confirm"
                 sh "oc rollout restart deployment/django"
             }
         }
