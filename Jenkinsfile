@@ -33,6 +33,7 @@ pipeline {
         stage("Deploy") {
             steps {
                 echo "Deploying to OpenShift"
+                sh "oc import-image django:openshift --confirm"
                 sh "oc rollout restart deployment/django"
             }
         }
