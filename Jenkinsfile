@@ -15,23 +15,21 @@ pipeline {
             }
         }
 
-        stage("Test") {
+        stage("Build") {
             steps {
-                echo "Testing app"
-                sh '''
-                    python3 -m venv venv
-                    . venv/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                    python manage.py test
-                '''
+                script {
+                    tripcraft = docker.build("athalt/tripcraft:openshift")
+                }
             }
         }
 
-        stage("Build") {
+        stage("Test") {
             steps {
-                echo "Building image"
-                sh "docker build --no-cache -t athalt/tripcraft:openshift ."
+                script {
+                    tripcraft.inside {
+                        sh 'python manage.py test'
+                    }
+                }
             }
         }
         
