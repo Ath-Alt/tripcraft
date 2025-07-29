@@ -1,36 +1,36 @@
 ## Jenkins CI/CD Pipeline
 
-This project uses a Jenkins pipeline to automatically test, build, and deploy the Django application to OpenShift.
+This project uses Jenkins to automatically test, build, and deploy a Django app to OpenShift.
 
 ### Pipeline Overview
 
-- **Trigger:** Runs on every push to the 'master' branch.
-- **Environment:** Docker, OpenShift, Jenkins
+- **Triggers:** Every time someone pushes to the 'master' branch
+- **Tools Used:** Docker, OpenShift, Jenkins
 
 ---
 
 ### Pipeline Stages
 
 #### 1. **Clone**
-Clones the 'master' branch of the repository using the Git plugin.
+Grabs the latest code from the 'master' branch using Git.
 
 #### 2. **Test**
-Executes Django tests using 'python manage.py test'.
+Runs Django tests with 'python manage.py test'.
 
 #### 3. **Build**
-Builds a new Docker image from the project directory:
+Makes a new Docker image (no cache):
 '''
 docker build --no-cache -t athalt/tripcraft:openshift .
 '''
 
 #### 4. **Push**
-Pushes the Docker image to DockerHub using Jenkins credentials:
+Sends the image to DockerHub (You'll need credentials set up to log in):
 '''
 docker push athalt/tripcraft:openshift
 '''
 
 #### 5. **Deploy**
-Restarts the OpenShift deployment to pick up the new images:
+Restarts the deployment on OpenShift to use the new image:
 '''
 oc rollout restart deployment/django
 '''
@@ -39,19 +39,19 @@ oc rollout restart deployment/django
 
 ### Credentials
 
-Make sure Jenkins has a credential entry with ID 'dockerHub' containing your DockerHub username and login token.
+Make sure Jenkins has a DockerHub login saved with the ID dockerHub.
 
 ---
 
 ### Dependencies
 
 - Docker
-- OpenShift CLI ('oc')
-- Jenkins (with Git, Docker, and Credentials plugins)
+- OpenShift CLI (oc)
+- Jenkins with plugins: Git, Docker, Credentials
 
 ---
 
 ### Notes
 
-- The default checkout is skipped using 'skipDefaultCheckout(true)' to allow manual git cloning.
-- Tests run inside the live OpenShift environment, so 'oc' CLI access must be configured on the Jenkins node.
+- Jenkins skips the default git checkout on purpose so it can clne manually.
+- The tests run inside the actual OpenShift environment, so Jenkins must be allowed to use oc.
