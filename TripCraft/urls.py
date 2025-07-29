@@ -20,7 +20,7 @@ urlpatterns = [
     path('admin_app/', include(('admin_app.urls','admin_app')),name='admin_app'),
 
     path('user_app/', include('user_app.urls')),
-    path('', include('user_app.urls', namespace='user_root')),
+    #path('', include('user_app.urls', namespace='user_root')),
     path('password_reset/', password_reset, name='password_reset'),
     path('verify_reset_code/', verify_reset_code, name='verify_reset_code'),
     path('set_new_password/', set_new_password, name='set_new_password'),
