@@ -8,7 +8,7 @@ pipeline {
         stage("Build") {
             steps {
                 echo "Building image"
-                withCredentials([usernamePassword(credentialsId: "dockerHub", "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser")]) {
+                withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser")]) {
                     sh "docker build -t ${env.dockerHubUser}/tripcraft:openshift ."
                 }
             }
