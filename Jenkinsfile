@@ -30,7 +30,7 @@ pipeline {
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
                     sh "docker push ${env.dockerHubUser}/tripcraft:openshift"
                 }
-                sh "oc rollout restart deployment/django"
+                sh "oc import-image django:openshift --confirm"
             }
         }
     }
