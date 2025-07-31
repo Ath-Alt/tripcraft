@@ -1,4 +1,4 @@
-#Jenkinsfile
+//Jenkinsfile
 
 pipeline {
     agent any
@@ -16,14 +16,14 @@ pipeline {
             }
         }
 
-        stage("Test") {
-            steps {
-                echo "Performing tests"
-                sh '''
-                    [ -d admin_app ] && [ -d user_app ] && [ -d TripCraft ]
-                '''
+            stage("Test") {
+                steps {
+                    echo "Performing tests"
+                    sh '''
+                        [ -d admin_app ] && [ -d user_app ] && [ -d TripCraft ]
+                    '''
+                }
             }
-        }
 
         stage("Deploy") {
             steps {
