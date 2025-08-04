@@ -1,3 +1,5 @@
+//Jenkinsfile
+
 pipeline {
     agent any
     triggers {
@@ -9,7 +11,7 @@ pipeline {
             steps {
                 echo "Building image"
                 withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser")]) {
-                    sh "docker build -t ${env.dockerHubUser}/tripcraft:openshift ."
+                    sh "docker build -t ${env.dockerHubUser}/tripcraft:${env.BUILD_NUMBER} ."
                 }
             }
         }
@@ -28,9 +30,9 @@ pipeline {
                 echo "Deploying to OpenShift"
                 withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser")]) {
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                    sh "docker push ${env.dockerHubUser}/tripcraft:openshift"
+                    sh "docker push ${env.dockerHubUser}/tripcraft:${env.BUILD_NUMBER}"
                 }
-                sh "oc import-image django:openshift --confirm"
+                sh "oc set image deployment/web web=athalt/tripcraft:${env.BUILD_NUMBER}"
             }
         }
     }
