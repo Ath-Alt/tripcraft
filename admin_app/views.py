@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
+import logging
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import logout
@@ -18,6 +19,12 @@ from .models import (
     TravelerVerification, Trip, Itinerary, Category, POI, HighestUserActivity, FeatureClick
 )
 from .utils import get_user_activity
+
+logger = logging.getLogger(__name__)
+
+def logging_view(request):
+    logger.warning("Warning from Django to Logstash")
+    return HttpResponse("Log sent!")
 
 # (SALMA)
 def is_staff(user):
@@ -107,7 +114,6 @@ def monitor(request):
     # Regular page render
     users = User.objects.all().values('username', 'email', 'is_staff')
     return render(request, 'monitor.html', {'users': users})
-
 
 #(SALMA)
 @login_required

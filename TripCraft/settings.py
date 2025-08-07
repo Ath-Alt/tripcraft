@@ -40,7 +40,52 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'admin_app',
     'user_app', # 👈 [Az] added '.apps.YourAppConfig' for autom creation for the main area
+    'django_elasticsearch_dsl',
 ]
+
+ELASTICSEARCH_DSL={
+    'default': {
+        'hosts': 'host.docker.internal:9200',
+    },
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'logstash': {
+            'level': 'WARNING',
+            'class': 'logstash.TCPLogstashHandler',
+            'host': 'host.docker.internal',
+            'port': 5959,
+            'version': 1,
+            'message_type': 'django',
+            'fqdn': False,
+            'tags': ['django.request'],
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['logstash'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
