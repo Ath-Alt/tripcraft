@@ -1,7 +1,6 @@
 
 from django.urls import path
 from . import views
-from admin_app.views import logging_view
 
 app_name = 'user_app'
 
