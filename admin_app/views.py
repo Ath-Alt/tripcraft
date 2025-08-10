@@ -20,12 +20,6 @@ from .models import (
 )
 from .utils import get_user_activity
 
-logger = logging.getLogger(__name__)
-
-def logging_view(request):
-    logger.warning("Warning from Django to Logstash")
-    return HttpResponse("Log sent!")
-
 # (SALMA)
 def is_staff(user):
     """Check if the user has staff privileges."""

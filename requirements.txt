@@ -7,6 +7,6 @@ six==1.17.0
 sqlparse==0.5.3
 tzdata==2025.1
 psycopg2-binary==2.9.10
-django-elasticsearch-dsl==7.2.4
+django-elasticsearch-dsl==7.3
 elasticsearch-dsl>=7.0,<8.0
 python-logstash==0.4.6
