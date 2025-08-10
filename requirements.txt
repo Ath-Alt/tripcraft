@@ -10,3 +10,4 @@ psycopg2-binary==2.9.10
 django-elasticsearch-dsl==7.3
 elasticsearch-dsl>=7.0,<8.0
 python-logstash==0.4.6
+elasticsearch>=8.0.0
