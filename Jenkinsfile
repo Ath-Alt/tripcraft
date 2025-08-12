@@ -14,14 +14,35 @@ pipeline {
             }
         }
 
-            stage("Test") {
-                steps {
-                    echo "Performing tests"
-                    sh '''
-                        [ -d admin_app ] && [ -d user_app ] && [ -d TripCraft ]
-                    '''
+        stage("Test") {
+            steps {
+                echo "Performing tests"
+                script {
+                    def success = false
+                    sh "docker run -d --name tripcraft -p 8000:8000 athalt/tripcraft:latest"
+
+                    timeout(time: 30, unit: 'SECONDS') {
+                        while (!success) {
+                            def logs = sh(script: "docker logs tripcraft", returnStdout: true).trim()
+                            if (logs.contains("Watching for file changes with StatReloader")) {
+                                success = true
+                            } else {
+                                sleep 1
+                            }
+                        }
+                    }
+                    
+                    sh "docker rm -f tripcraft"
+
+                    if (success) {
+                        echo "Container passed running test"
+                    }
+                    else {
+                        error "Container failed running test"
+                    }
                 }
             }
+        }
 
         stage("Deploy") {
             steps {
