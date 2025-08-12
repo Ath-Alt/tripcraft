@@ -24,7 +24,9 @@ pipeline {
                     try {
                         timeout(time: 30, unit: 'SECONDS') {
                             while (!success) {
+                                echo "Status: ${success}"
                                 def logs = sh(script: "docker logs tripcraft", returnStdout: true).trim()
+                                echo "Logs: ${logs}"
                                 if (logs.contains("INFO Watching for file changes with StatReloader")) {
                                     success = true
                                 } else {
