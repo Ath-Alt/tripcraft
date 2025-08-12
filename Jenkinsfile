@@ -20,24 +20,15 @@ pipeline {
                 script {
                     def success = false
                     sh "docker run -d --name tripcraft -p 8000:8000 athalt/tripcraft:latest"
-
-                    try {
-                        timeout(time: 30, unit: 'SECONDS') {
-                            while (!success) {
-                                echo "Status: ${success}"
-                                def logs = sh(script: "docker logs tripcraft 2>&1", returnStdout: true).trim()
-                                echo "Logs: ${logs}"
-                                if (logs.contains("INFO Watching for file changes with StatReloader")) {
-                                    success = true
-                                } else {
-                                    sleep 5
-                                }
-                            }
-                        }
-                    } finally {
-                        sh "docker rm -f tripcraft"
+                    sleep 5
+                    def logs = sh(script: "docker logs tripcraft 2>&1", returnStdout: true).trim()
+                    sh "docker rm -f tripcraft"
+                    if (logs.contains("INFO Watching for file changes with StatReloader")) {
+                        echo "Container passed running test"
                     }
-                    echo "Container passed running test"
+                    else {
+                        error "Container failed running test"
+                    }
                 }
             }
         }
