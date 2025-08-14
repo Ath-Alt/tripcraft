@@ -24,7 +24,7 @@ for index in [profile_index, category_index, trip_index, follow_index, like_inde
 class ProfileDocument(Document):
     class Django:
         model = UserProfile
-        fields = ['gender', 'bio', 'account_active', 'likes_notifications', 'followers_notification',]
+        fields = ['gender', 'bio', 'account_active', 'likes_notifications', 'followers_notifications',]
     
     user = fields.ObjectField(properties= {
         'username': fields.TextField(),
