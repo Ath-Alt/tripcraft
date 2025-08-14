@@ -43,28 +43,21 @@ INSTALLED_APPS = [
     'django_elasticsearch_dsl',
 ]
 
+# Connect Django container to Elasticsearch on host
 ELASTICSEARCH_DSL={
     'default': {
-        'hosts': 'host.docker.internal:9200',
+        'hosts': 'host.docker.internal:9200', # Elastic's port
     },
 }
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
-    },
+    'disable_existing_loggers': False, # Keep Django loggers alive
     'handlers': {
         'console': {
-            'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
         },
         'logstash': {
-            'level': 'WARNING',
             'class': 'logstash.TCPLogstashHandler',
             'host': 'host.docker.internal',
             'port': 5959,
@@ -77,7 +70,6 @@ LOGGING = {
     'loggers': {
         'django.request': {
             'handlers': ['logstash'],
-            'level': 'WARNING',
             'propagate': True,
         },
         'django': {
