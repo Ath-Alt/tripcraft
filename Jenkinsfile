@@ -23,7 +23,7 @@ pipeline {
                     sleep 5
                     def logs = sh(script: "docker logs tripcraft 2>&1", returnStdout: true).trim()
                     sh "docker rm -f tripcraft"
-                    if (logs.contains("INFO Watching for file changes with StatReloader")) {
+                    if (logs.contains("Watching for file changes with StatReloader")) {
                         echo "Container passed running test"
                     }
                     else {
